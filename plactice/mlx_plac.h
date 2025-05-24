@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 11:35:59 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/18 18:45:41 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:30:04 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "mlx.h"
 #include "get_next_line.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -44,6 +45,16 @@ typedef struct s_vars
 	void	*win;
 	t_data	*image;
 }	t_vars;
+
+typedef struct s_calc
+{
+	int	x;
+	int	y;
+	int	delta_x;
+	int	delta_y;
+	int	sign_x;
+	int	sign_y;
+}	t_calc;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int		color_init(t_color *scale);

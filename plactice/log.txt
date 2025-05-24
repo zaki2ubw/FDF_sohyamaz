@@ -1,0 +1,51 @@
+make -C Libft
+make[1]: Entering directory '/home/sohyamaz/Cursus/FDF/plactice/Libft'
+cc -Wall -Wextra -Werror -c ft_isalnum.c -o ft_isalnum.o
+cc -Wall -Wextra -Werror -c ft_isprint.c -o ft_isprint.o
+cc -Wall -Wextra -Werror -c ft_memmove.c -o ft_memmove.o
+cc -Wall -Wextra -Werror -c ft_strlcat.c -o ft_strlcat.o
+cc -Wall -Wextra -Werror -c ft_strnstr.c -o ft_strnstr.o
+cc -Wall -Wextra -Werror -c ft_atoi.c -o ft_atoi.o
+cc -Wall -Wextra -Werror -c ft_isalpha.c -o ft_isalpha.o
+cc -Wall -Wextra -Werror -c ft_memchr.c -o ft_memchr.o
+cc -Wall -Wextra -Werror -c ft_memset.c -o ft_memset.o
+cc -Wall -Wextra -Werror -c ft_strlcpy.c -o ft_strlcpy.o
+cc -Wall -Wextra -Werror -c ft_strrchr.c -o ft_strrchr.o
+cc -Wall -Wextra -Werror -c ft_bzero.c -o ft_bzero.o
+cc -Wall -Wextra -Werror -c ft_isascii.c -o ft_isascii.o
+cc -Wall -Wextra -Werror -c ft_memcmp.c -o ft_memcmp.o
+cc -Wall -Wextra -Werror -c ft_strchr.c -o ft_strchr.o
+cc -Wall -Wextra -Werror -c ft_strlen.c -o ft_strlen.o
+cc -Wall -Wextra -Werror -c ft_tolower.c -o ft_tolower.o
+cc -Wall -Wextra -Werror -c ft_calloc.c -o ft_calloc.o
+cc -Wall -Wextra -Werror -c ft_isdigit.c -o ft_isdigit.o
+cc -Wall -Wextra -Werror -c ft_memcpy.c -o ft_memcpy.o
+cc -Wall -Wextra -Werror -c ft_strdup.c -o ft_strdup.o
+cc -Wall -Wextra -Werror -c ft_strncmp.c -o ft_strncmp.o
+cc -Wall -Wextra -Werror -c ft_toupper.c -o ft_toupper.o
+cc -Wall -Wextra -Werror -c ft_substr.c -o ft_substr.o
+cc -Wall -Wextra -Werror -c ft_strjoin.c -o ft_strjoin.o
+cc -Wall -Wextra -Werror -c ft_strtrim.c -o ft_strtrim.o
+cc -Wall -Wextra -Werror -c ft_split.c -o ft_split.o
+cc -Wall -Wextra -Werror -c ft_itoa.c -o ft_itoa.o
+cc -Wall -Wextra -Werror -c ft_strmapi.c -o ft_strmapi.o
+cc -Wall -Wextra -Werror -c ft_striteri.c -o ft_striteri.o
+cc -Wall -Wextra -Werror -c ft_putchar_fd.c -o ft_putchar_fd.o
+cc -Wall -Wextra -Werror -c ft_putstr_fd.c -o ft_putstr_fd.o
+cc -Wall -Wextra -Werror -c ft_putendl_fd.c -o ft_putendl_fd.o
+cc -Wall -Wextra -Werror -c ft_putnbr_fd.c -o ft_putnbr_fd.o
+ar -rcs libft.a ft_isalnum.o ft_isprint.o ft_memmove.o ft_strlcat.o ft_strnstr.o ft_atoi.o ft_isalpha.o ft_memchr.o ft_memset.o ft_strlcpy.o ft_strrchr.o ft_bzero.o ft_isascii.o ft_memcmp.o ft_strchr.o ft_strlen.o ft_tolower.o ft_calloc.o ft_isdigit.o ft_memcpy.o ft_strdup.o ft_strncmp.o ft_toupper.o ft_substr.o ft_strjoin.o ft_strtrim.o ft_split.o ft_itoa.o ft_strmapi.o ft_striteri.o ft_putchar_fd.o ft_putstr_fd.o ft_putendl_fd.o ft_putnbr_fd.o -o libft.a
+make[1]: Leaving directory '/home/sohyamaz/Cursus/FDF/plactice/Libft'
+cc -Wall -Wextra -Werror -ILibft  -I/usr/include -Imlx_linux -O3 -c main.c -o main.o
+main.c:102:31: error: incompatible pointer to integer conversion passing 'char [2]' to parameter of type 'char' [-Werror,-Wint-conversion]
+                map[count] = ft_split(line, " ");
+                                            ^~~
+Libft/libft.h:43:37: note: passing argument to parameter 'c' here
+char    **ft_split(char const *s, char c);
+                                       ^
+main.c:102:14: error: incompatible pointer types assigning to 'char *' from 'char **'; dereference with * [-Werror,-Wincompatible-pointer-types]
+                map[count] = ft_split(line, " ");
+                           ^ ~~~~~~~~~~~~~~~~~~~
+                             *
+2 errors generated.
+make: *** [Makefile:47: main.o] Error 1
