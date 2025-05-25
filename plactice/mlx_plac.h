@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 11:35:59 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/25 16:03:11 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/25 18:57:44 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ typedef struct s_calc
 	int	delta_y;
 	int	sign_x;
 	int	sign_y;
+	int	start_x;
+	int	start_y;
+	int	goal_x;
+	int goal_y;
+	int err;
+	int	zoom;
 }	t_calc;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);

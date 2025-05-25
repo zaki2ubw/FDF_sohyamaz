@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/25 17:56:20 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/25 19:45:40 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	if (data == NULL)
 		exit (0);
 	else if (x < 0 || x >= 1920 || y < 0 || y >= 1080)
-		exit (0);
+		return ;
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
@@ -105,14 +105,72 @@ void	free_coordinate(int **coordinate, int column)
 	free (coordinate);
 	return ;
 }
+void	set_calc(t_calc *calc)
+{
+	calc->zoom = 50;
+	calc->start_x = calc->x * calc->zoom;
+	calc->start_y = calc->y * calc->zoom;
+	calc->goal_x = (calc->x + 1) * calc->zoom;
+	calc->goal_y = (calc->y + 1) * calc->zoom;
+	calc->delta_x = abs(calc->goal_x - calc->start_x);
+	calc->delta_y = -abs(calc->goal_y - calc->start_y);
+	if (calc->start_x < calc->goal_x)
+		calc->sign_x = 1;
+	else
+		calc->sign_x = -1;
+	if (calc->start_y < calc->goal_y)
+		calc->sign_y = 1;
+	else
+		calc->sign_x = -1;	
+	return ;
+}
+
+void	draw_line(t_vars *var, t_calc *calc, int color)
+{
+	set_calc(calc);
+	if (calc->start_x < 0 || calc->start_x >= 1920 ||\
+		calc->start_y < 0 || calc->start_y >= 1080)
+		 return ;
+	my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+	if (calc->delta_x >= abs(calc->delta_y))
+	{
+		calc->err = calc->delta_x / 2;
+		while (calc->start_x < calc->goal_x)
+		{
+			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			calc->start_x = calc->start_x + calc->sign_x;
+			calc->err = calc->err - abs(calc->delta_y);
+			if (calc->err < 0)
+			{
+				calc->start_y = calc->start_y + calc->sign_y;
+				calc->err = calc->err + calc->delta_x;
+			}
+		}
+	}
+	else
+	{
+		calc->err = abs(calc->delta_y) / 2;
+		while (calc->start_y < calc->goal_y)
+		{
+			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			calc->start_y = calc->start_y + calc->sign_y;
+			calc->err = calc->err - calc->delta_x;
+			if (calc->err < 0)
+			{
+				calc->start_x = calc->start_x + calc->sign_x;
+				calc->err = calc->err + abs(calc->delta_y);
+			}
+		}
+	}
+	my_mlx_pixel_put(var->image, calc->goal_x, calc->goal_y, color);
+	return ;
+}
 
 int	main(void)
 {
 	t_vars	var = {0};
 	int		fd;
 	char	*line;
-//	t_calc	start;
-//	t_calc	goal;
 	int		count;
 	char	***map;
 	int		**coordinate;
@@ -120,20 +178,7 @@ int	main(void)
 	int		rep;
 	int		column;
 	int		val;
-	int		x;
-	int		y;
-	int		x_step;
-	int		y_step;
-	int		dx;
-	int		dy;
-	int		sx;
-	int		sy;
-	int		px;
-	int		py;
-	int		e;
-	int		m;
-	int		i;
-	int		zoom;
+	t_calc	*calc;
 
 	var.mlx = mlx_init();
 	var.win = mlx_new_window(var.mlx, 1920, 1080, "Hello_World!!");
@@ -185,61 +230,74 @@ int	main(void)
 		}
 		count++;
 	}
-	y = 1;
-	x = 1;
-	e = 0;
-	m = 0;
-	zoom = 150;
-	sx = x * zoom;
-	sy = y * zoom;
-	px = (x + 1) * zoom;
-	py = (y + 1) * zoom;
-	dx = abs(px - sx);
-	dy = -abs(py - sy);
-	m = dy / dx;
-	i = 0;
-	if (sx < px)
-		x_step = 1;
-	else
-		x_step = -1;
-	if (sy < py)
-		y_step = 1;
-	else
-		y_step = -1;	
-	if (sx < 0 || sx >= 1920 || sy < 0 || sy >= 1080)
-		exit (0);
-	my_mlx_pixel_put(var.image, sx, sy, 0x0000FF00);
-	if (dx >= abs(dy))
+	calc = (t_calc *)ft_calloc(sizeof(t_calc), 1);
+	if (calc == NULL)
+		return (0);
+	calc->zoom = 200;
+	while (calc->y != column)
 	{
-		e = dx / 2;
-		while (sx != px)
+		calc->x = 0;
+		while (calc->x != row)
 		{
-			my_mlx_pixel_put(var.image, sx, sy, 0xFF00FF00);
-			sx = sx + x_step;
-			e = e - abs(dy);
-			if (e < 0)
-			{
-				sy = sy + y_step;
-				e = e + dx;
-			}
+			draw_line(&var, calc, 0xff00ff00);
+			calc->x++;
 		}
+		calc->y++;
 	}
-	else
-	{
-		e = abs(dy) / 2;
-		while (sy != py)
-		{
-			my_mlx_pixel_put(var.image, sx, sy, 0x6600FF00);
-			sy = sy + y_step;
-			e = e - dx;
-			if (e < 0)
-			{
-				sx = sx + x_step;
-				e = e + abs(dy);
-			}
-		}
-	}
-	my_mlx_pixel_put(var.image, px, py, 0x0000FF00);
+	free (calc);
+//	e = 0;
+//	m = 0;
+//	zoom = 150;
+//	sx = x * zoom;
+//	sy = y * zoom;
+//	px = (x + 1) * zoom;
+//	py = (y + 1) * zoom;
+//	dx = abs(px - sx);
+//	dy = -abs(py - sy);
+//	m = dy / dx;
+//	i = 0;
+//	if (sx < px)
+//		x_step = 1;
+//	else
+//		x_step = -1;
+//	if (sy < py)
+//		y_step = 1;
+//	else
+//		y_step = -1;	
+//	if (sx < 0 || sx >= 1920 || sy < 0 || sy >= 1080)
+//		exit (0);
+//	my_mlx_pixel_put(var.image, sx, sy, 0x0000FF00);
+//	if (dx >= abs(dy))
+//	{
+//		e = dx / 2;
+//		while (sx != px)
+//		{
+//			my_mlx_pixel_put(var.image, sx, sy, 0xFF00FF00);
+//			sx = sx + x_step;
+//			e = e - abs(dy);
+//			if (e < 0)
+//			{
+//				sy = sy + y_step;
+//				e = e + dx;
+//			}
+//		}
+//	}
+//	else
+//	{
+//		e = abs(dy) / 2;
+//		while (sy != py)
+//		{
+//			my_mlx_pixel_put(var.image, sx, sy, 0x6600FF00);
+//			sy = sy + y_step;
+//			e = e - dx;
+//			if (e < 0)
+//			{
+//				sx = sx + x_step;
+//				e = e + abs(dy);
+//			}
+//		}
+//	}
+//	my_mlx_pixel_put(var.image, px, py, 0x0000FF00);
 	mlx_put_image_to_window(var.mlx, var.win, var.image->img, 0, 0);
 	free_map(map, column, row);
 	free_coordinate(coordinate, column);
