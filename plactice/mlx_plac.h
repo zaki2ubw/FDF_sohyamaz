@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/18 11:35:59 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/25 18:57:44 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/25 20:02:30 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_vars
 {
 	void	*mlx;
 	void	*win;
+	int		width;
+	int		height;
 	t_data	*image;
 }	t_vars;
 
