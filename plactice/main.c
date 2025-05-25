@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/24 22:03:23 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:29:10 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	char	*dst;
 
 	if (data == NULL)
+		exit (0);
+	else if (x < 0 || x >= 1920 || y < 0 || y >= 1080)
 		exit (0);
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
@@ -120,13 +122,18 @@ int	main(void)
 	int		val;
 	int		x;
 	int		y;
+	int		x_step;
+	int		y_step;
 	int		dx;
 	int		dy;
+	int		sx;
+	int		sy;
 	int		px;
 	int		py;
 	int		e;
 	int		m;
 	int		i;
+	int		zoom;
 
 	var.mlx = mlx_init();
 	var.win = mlx_new_window(var.mlx, 1920, 1080, "Hello_World!!");
@@ -178,62 +185,116 @@ int	main(void)
 		}
 		count++;
 	}
-	y = 0;
+	y = 1;
 	x = 1;
 	e = 0;
 	m = 0;
+	zoom = 500;
+	sx = x * zoom;
+	sy = y * zoom;
+	px = (x + 1) * zoom;
+	py = (y + 1) * zoom;
+	dx = abs(px - sx);
+	dy = -abs(py - sy);
+	m = dy / dx;
+	e = dx + dy;
 	i = 0;
-	px = 0;
-	py = 0;
-	my_mlx_pixel_put(var.image, 0, 0, 0x0000FF00);
-	while (y < column)
+	if (sx < px)
+		x_step = 1;
+	else
+		x_step = -1;
+	if (sy < py)
+		y_step = 1;
+	else
+		y_step = -1;	
+	if (sx < 0 || sx >= 1920 || sy < 0 || sy >= 1080)
+		exit (0);
+	if (dx >= dy)
 	{
-		while (x < row)
-		{
-			my_mlx_pixel_put(var.image, x * 50, y * 50, 0x0000FF00);
-			dx = x * 50 - x;
-			dy = y * 50 - y;
-			m = dy / dx;
-			e = 2 * dy - dx;
-			px = x;
-			py = y;
-			if (m < 0)
-			{
-				while (i < dx)
-				{
-					px = px + 1;
-					if (e < 0)
-						e = e + 2 * dy;
-					else
-					{
-						py = py + 1;
-						e = e + 2 * dy - 2 * dx;
-					}
-					my_mlx_pixel_put(var.image, px, py, 0x00FF0000);
-					i++;
-				}
-			} 
-			else
-			{
-				while (i < dx)
-				{
-					px = px + 1;
-					if (e < 0)
-						e = e + 2 * dy;
-					else
-					{
-						py = py + 1;
-						e = e + 2 * dy + 2 * dx;
-					}
-					my_mlx_pixel_put(var.image, px, py, 0x00FF0000);
-					i++;
-				}
-			} 
-			x++;
-		}
-		y++;
-		x = 0;
-	}
+		
+//	while (1)
+//	{
+//		my_mlx_pixel_put(var.image, sx, sy, 0x0000FF00);
+//		if ((x_step == 1 && sx > px) || (x_step == -1 && sx < px) ||\
+//			(y_step == 1 && sy > py) || (y_step == -1 && sy < py))
+//			break;
+//		i = 2 * e;
+//		if (i >= dy)
+//		{
+//			e = e - dy;
+//			sx = sx + x_step;
+//		}
+//		if (i <= dx)
+//		{
+//			e = e + dx;
+//			sy = sy + y_step;
+//		}
+//	}
+//	while (1)
+//	{
+//		if (sx == px && sy == py)
+//			break ;
+//		else if (sx < 0 || sx >= 1920 || sy < 0 || sy >= 1080)
+//			exit (0);
+//		if (e < 0)
+//			e = e + 2 * dy;
+//		else
+//		{
+//			sy = sy + 1;
+//			e = e + (2 * dy) - (2 * dx);
+//		}
+//		my_mlx_pixel_put(var.image, sx, sy, 0x000000FF);
+//		sx++;
+//	}
+//	while (y < column)
+//	{
+//		while (x < row)
+//		{
+//			my_mlx_pixel_put(var.image, x * 50, y * 50, 0x0000FF00);
+//			dx = x * 50 - x;
+//			dy = y * 50 - y;
+//			m = dy / dx;
+//			e = 2 * dy - dx;
+//			px = x;
+//			py = y;
+//			i = 0;
+//			if (m < 0)
+//			{
+//				while (i < dx)
+//				{
+//					px = px + 1;
+//					if (e < 0)
+//						e = e + 2 * dy;
+//					else
+//					{
+//						py = py + 1;
+//						e = e + 2 * dy - 2 * dx;
+//					}
+//					my_mlx_pixel_put(var.image, px, py, 0x00FF0000);
+//					i++;
+//				}
+//			} 
+//			else
+//			{
+//				while (i < dx)
+//				{
+//					px = px + 1;
+//					if (e < 0)
+//						e = e + 2 * dy;
+//					else
+//					{
+//						py = py + 1;
+//						e = e + 2 * dy + 2 * dx;
+//					}
+//					my_mlx_pixel_put(var.image, px, py, 0x00FF0000);
+//					i++;
+//				}
+//			} 
+//			x++;
+//		}
+//		y++;
+//		x = 1;
+//	}
 	mlx_put_image_to_window(var.mlx, var.win, var.image->img, 0, 0);
 	free_map(map, column, row);
 	free_coordinate(coordinate, column);
