@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/25 21:30:08 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/26 21:44:06 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,9 +169,15 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 	my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
 	if (calc->delta_x == 0)
 	{
-		while (calc->start_y != calc->goal_y)
+		while (1)
 		{
 			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			if (calc->start_y == calc->goal_y)
+				break ;
+			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+				break ;
+			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+				break ;
 			calc->start_y = calc->start_y + calc->sign_y;
 		}
 		return ;
@@ -181,6 +187,12 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 		while (calc->start_x != calc->goal_x)
 		{
 			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			if (calc->start_x == calc->goal_x)
+				break ;
+			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+				break ;
+			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+				break ;
 			calc->start_x = calc->start_x + calc->sign_x;
 		}
 		return ;
@@ -188,9 +200,19 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 	else if (calc->delta_x >= abs(calc->delta_y))
 	{
 		calc->err = calc->delta_x / 2;
-		while (calc->start_x != calc->goal_x)
+		while (1)
 		{
 			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+				break ;
+			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+				break ;
+			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+				break ;
+			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+				break ;
+			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+				break ;
 			calc->start_x = calc->start_x + calc->sign_x;
 			calc->err = calc->err - abs(calc->delta_y);
 			if (calc->err < 0)
@@ -206,6 +228,16 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 		while (calc->start_y != calc->goal_y)
 		{
 			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+				break ;
+			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+				break ;
+			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+				break ;
+			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+				break ;
+			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+				break ;
 			calc->start_y = calc->start_y + calc->sign_y;
 			calc->err = calc->err - calc->delta_x;
 			if (calc->err < 0)
@@ -270,7 +302,10 @@ int	main(void)
 	}
 	coordinate = ft_calloc(sizeof(int *), column);
 	if (coordinate == NULL)
+	{
+		free_map(map, column, count);
 		return (0);
+	}
 	row = 0;
 	val = 0;
 	while (map[0][row] != NULL)
@@ -279,7 +314,11 @@ int	main(void)
 	{
 		coordinate[val] = ft_calloc(sizeof(int),row);
 		if (coordinate[val] == NULL)
+		{
+			free_map(map, column, row);
+			free_coordinate(coordinate, column);
 			return (0);
+		}
 		val++;
 	}
 	count = 0;
@@ -296,15 +335,26 @@ int	main(void)
 	}
 	calc = (t_calc *)ft_calloc(sizeof(t_calc), 1);
 	if (calc == NULL)
+	{
+		free_map(map, column, row);
+		free_coordinate(coordinate, column);
 		return (0);
+	}
 	calc->zoom = 200;
 	calc->y = 0;
+	calc->x = 0;
 	while (calc->y != column)
 	{
 		set_calc_for_slant(calc);
 		if (calc->start_x < 0 || calc->start_x >= var->width ||\
 			calc->start_y < 0 || calc->start_y >= var->height)
-	 		return (0);
+		{
+			free_map(map, column, row);
+			free_coordinate(coordinate, column);
+			free (calc);
+			printf("slant\n");
+			return (0);
+		}
 		calc->x = 0;
 		while (calc->x != row)
 		{
@@ -314,12 +364,19 @@ int	main(void)
 		calc->y++;
 	}
 	calc->y = 0;
+	calc->x = 0;
 	while (calc->y != column)
 	{
 		set_calc_for_horizontal(calc);
 		if (calc->start_x < 0 || calc->start_x >= var->width ||\
 			calc->start_y < 0 || calc->start_y >= var->height)
-	 		return (0);
+		{
+			free_map(map, column, row);
+			free_coordinate(coordinate, column);
+			free (calc);
+			printf("horizontal\n");
+			return (0);
+		}
 		calc->x = 0;
 		while (calc->x != row)
 		{
@@ -329,12 +386,19 @@ int	main(void)
 		calc->y++;
 	}
 	calc->y = 0;
+	calc->x = 0;
 	while (calc->y < column)
 	{
 		set_calc_for_vertical(calc);
 		if (calc->start_x < 0 || calc->start_x >= var->width ||\
 			calc->start_y < 0 || calc->start_y >= var->height)
-	 		return (0);
+		{
+			free_map(map, column, row);
+			free_coordinate(coordinate, column);
+			free (calc);
+			printf("vertical\n");
+			return (0);
+		}
 		calc->x = 0;
 		while (calc->x < row)
 		{
