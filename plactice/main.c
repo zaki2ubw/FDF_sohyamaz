@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/05/26 21:44:06 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:36:18 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,25 @@ void	free_coordinate(int **coordinate, int column)
 	free (coordinate);
 	return ;
 }
+void	set_calc(t_calc *calc)
+{
+	calc->start_x = calc->start_x * calc->zoom;
+	calc->start_y = calc->start_y * calc->zoom;
+	calc->goal_x = calc->goal_x * calc->zoom;
+	calc->goal_y = calc->goal_y *  calc->zoom;
+	calc->delta_x = abs(calc->goal_x - calc->start_x);
+	calc->delta_y = -abs(calc->goal_y - calc->start_y);
+	if (calc->start_x < calc->goal_x)
+		calc->sign_x = 1;
+	else
+		calc->sign_x = -1;
+	if (calc->start_y < calc->goal_y)
+		calc->sign_y = 1;
+	else
+		calc->sign_y = -1;	
+	return ;
+}
+
 
 void	set_calc_for_slant(t_calc *calc)
 {
@@ -184,7 +203,7 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 	}
 	else if (calc->delta_y == 0)
 	{
-		while (calc->start_x != calc->goal_x)
+		while (1)
 		{
 			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
 			if (calc->start_x == calc->goal_x)
@@ -197,56 +216,109 @@ void	draw_line(t_vars *var, t_calc *calc, int color)
 		}
 		return ;
 	}
-	else if (calc->delta_x >= abs(calc->delta_y))
+	else if (calc->delta_x >= abs(calc->delta_y))//lower than one
 	{
-		calc->err = calc->delta_x / 2;
+		p = 2 * abs(calc->delta_y) - abs(calc->delta_x);
 		while (1)
 		{
-			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+			//watch and break when pixel reached the goal
+			if (calc->start_x == calc->goal_x && calc->start_y == calc->goal_y)
 				break ;
-			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+			if (calc->start_x > calc->goal_x && calc->sign_x > 0)//x over the goal
 				break ;
-			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+			if (calc->start_x < calc->goal_x && calc->sign_x < 0)//x under the goal
 				break ;
-			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+			if (calc->start_y < calc->goal_y && calc->sign_y > 0)//y over the goal
 				break ;
-			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+			if (calc->start_y > calc->goal_y && calc->sign_y < 0)//y under the goal
 				break ;
-			calc->start_x = calc->start_x + calc->sign_x;
-			calc->err = calc->err - abs(calc->delta_y);
-			if (calc->err < 0)
+			calc->start_x++;
+			if (calc->err < 0)//if err over the 0, one up y
+				calc->err = calc->err + 2 * calc->delta_y;
+			else
 			{
-				calc->start_y = calc->start_y + calc->sign_y;
-				calc->err = calc->err + calc->delta_x;
+				calc_start->y++;
+				calc_err = calc->err + calc->delta_y * 2 - calc_delta_x * 2;
 			}
-		}
+			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
 	}
 	else
 	{
-		calc->err = abs(calc->delta_y) / 2;
-		while (calc->start_y != calc->goal_y)
+		p = 2 * abs(calc->delta_x) - abs(calc->delta_y);
+		while (1)
 		{
-			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+			//watch and break when pixel reached the goal
+			if (calc->start_x == calc->goal_x && calc->start_y == calc->goal_y)
 				break ;
-			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+			if (calc->start_x > calc->goal_x && calc->sign_x > 0)//x over the goal
 				break ;
-			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+			if (calc->start_x < calc->goal_x && calc->sign_x < 0)//x under the goal
 				break ;
-			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+			if (calc->start_y < calc->goal_y && calc->sign_y > 0)//y over the goal
 				break ;
-			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+			if (calc->start_y > calc->goal_y && calc->sign_y < 0)//y under the goal
 				break ;
-			calc->start_y = calc->start_y + calc->sign_y;
-			calc->err = calc->err - calc->delta_x;
-			if (calc->err < 0)
+			calc->start_y++;
+			if (calc->err < 0)//if err over the 0, one up x
+				calc->err = calc->err + 2 * calc->delta_x;
+			else
 			{
-				calc->start_x = calc->start_x + calc->sign_x;
-				calc->err = calc->err + abs(calc->delta_y);
+				calc_start->x++;
+				calc_err = calc->err + calc->delta_x * 2 - calc_delta_y * 2;
 			}
-		}
+			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
 	}
+//	else if (calc->delta_x >= abs(calc->delta_y))
+//	else if (calc->delta_x >= abs(calc->delta_y))
+//	{
+//		calc->err = calc->delta_x / 2;
+//		while (1)
+//		{
+//			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+//			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+//				break ;
+//			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+//				break ;
+//			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+//				break ;
+//			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+//				break ;
+//			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+//				break ;
+//			calc->start_x = calc->start_x + calc->sign_x;
+//			calc->err = calc->err - abs(calc->delta_y);
+//			if (calc->err < 0)
+//			{
+//				calc->start_y = calc->start_y + calc->sign_y;
+//				calc->err = calc->err + calc->delta_x;
+//			}
+//		}
+//	}
+//	else
+//	{
+//		calc->err = abs(calc->delta_y) / 2;
+//		while (calc->start_y != calc->goal_y)
+//		{
+//			my_mlx_pixel_put(var->image, calc->start_x, calc->start_y, color);
+//			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
+//				break ;
+//			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
+//				break ;
+//			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
+//				break ;
+//			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
+//				break ;
+//			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
+//				break ;
+//			calc->start_y = calc->start_y + calc->sign_y;
+//			calc->err = calc->err - calc->delta_x;
+//			if (calc->err < 0)
+//			{
+//				calc->start_x = calc->start_x + calc->sign_x;
+//				calc->err = calc->err + abs(calc->delta_y);
+//			}
+//		}
+//	}
 	my_mlx_pixel_put(var->image, calc->goal_x, calc->goal_y, color);
 	return ;
 }
@@ -343,70 +415,80 @@ int	main(void)
 	calc->zoom = 200;
 	calc->y = 0;
 	calc->x = 0;
-	while (calc->y != column)
+	while (1)
 	{
-		set_calc_for_slant(calc);
-		if (calc->start_x < 0 || calc->start_x >= var->width ||\
-			calc->start_y < 0 || calc->start_y >= var->height)
-		{
-			free_map(map, column, row);
-			free_coordinate(coordinate, column);
-			free (calc);
-			printf("slant\n");
-			return (0);
-		}
-		calc->x = 0;
-		while (calc->x != row)
-		{
-			draw_line(var, calc, 0xff00ff00);
-			calc->x++;
-		}
-		calc->y++;
-	}
-	calc->y = 0;
-	calc->x = 0;
-	while (calc->y != column)
-	{
-		set_calc_for_horizontal(calc);
-		if (calc->start_x < 0 || calc->start_x >= var->width ||\
-			calc->start_y < 0 || calc->start_y >= var->height)
-		{
-			free_map(map, column, row);
-			free_coordinate(coordinate, column);
-			free (calc);
-			printf("horizontal\n");
-			return (0);
-		}
-		calc->x = 0;
-		while (calc->x != row)
-		{
-			draw_line(var, calc, 0xff00ff00);
-			calc->x++;
-		}
-		calc->y++;
-	}
-	calc->y = 0;
-	calc->x = 0;
-	while (calc->y < column)
-	{
-		set_calc_for_vertical(calc);
-		if (calc->start_x < 0 || calc->start_x >= var->width ||\
-			calc->start_y < 0 || calc->start_y >= var->height)
-		{
-			free_map(map, column, row);
-			free_coordinate(coordinate, column);
-			free (calc);
-			printf("vertical\n");
-			return (0);
-		}
-		calc->x = 0;
-		while (calc->x < row)
-		{
-			draw_line(var, calc, 0xff00ff00);
-			calc->x++;
-		}
-		calc->y++;
-	}
+		if (calc_y == column)
+			break ;
+		calc->start_x = var->width / 4;
+		calc->goal_x = var->width - calc->start_x;
+		calc->goal_y = var->height / 4;
+		calc->start_y = var->height - calc->goal_y;
+		set_calc(calc);
+		//review the roop rule!!!!!!!!
+//	while (calc->y != column)
+//	{
+//		set_calc_for_slant(calc);
+//		if (calc->start_x < 0 || calc->start_x >= var->width ||\
+//			calc->start_y < 0 || calc->start_y >= var->height)
+//		{
+//			free_map(map, column, row);
+//			free_coordinate(coordinate, column);
+//			free (calc);
+//			printf("slant\n");
+//			return (0);
+//		}
+//		calc->x = 0;
+//		while (calc->x != row)
+//		{
+//			draw_line(var, calc, 0xff00ff00);
+//			calc->x++;
+//		}
+//		calc->y++;
+//	}
+//	calc->y = 0;
+//	calc->x = 0;
+//	while (calc->y != column)
+//	{
+//		set_calc_for_horizontal(calc);
+//		if (calc->start_x < 0 || calc->start_x >= var->width ||\
+//			calc->start_y < 0 || calc->start_y >= var->height)
+//		{
+//			free_map(map, column, row);
+//			free_coordinate(coordinate, column);
+//			free (calc);
+//			printf("horizontal\n");
+//			return (0);
+//		}
+//		calc->x = 0;
+//		while (calc->x != row)
+//		{
+//			draw_line(var, calc, 0xff00ff00);
+//			calc->x++;
+//		}
+//		calc->y++;
+//	}
+//	calc->y = 0;
+//	calc->x = 0;
+//	while (calc->y < column)
+//	{
+//		set_calc_for_vertical(calc);
+//		if (calc->start_x < 0 || calc->start_x >= var->width ||\
+//			calc->start_y < 0 || calc->start_y >= var->height)
+//		{
+//			free_map(map, column, row);
+//			free_coordinate(coordinate, column);
+//			free (calc);
+//			printf("vertical\n");
+//			return (0);
+//		}
+//		calc->x = 0;
+//		while (calc->x < row)
+//		{
+//			draw_line(var, calc, 0xff00ff00);
+//			calc->x++;
+//		}
+//		calc->y++;
+//	}
 	free (calc);
 	mlx_put_image_to_window(var->mlx, var->win, var->image->img, 0, 0);
 	free_map(map, column, row);
