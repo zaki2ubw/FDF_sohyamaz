@@ -12,48 +12,6 @@
 
 #include "mlx_plac.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
-
-	if (data == NULL)
-		exit (0);
-	else if (x < 0 || x >= 1920 || y < 0 || y >= 1080)
-		return ;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
-
-int	color_init(t_color *scale)
-{
-	int	color;
-
-	color = 0;
-	color = (scale->clear << 24) | (scale->red << 16) | (scale->green << 8) | scale->blue;
-	scale->clear = (scale->clear + 10) % 256;
-	scale->red = (scale->red + 10) % 256;
-	scale->green = (scale->green + 10) % 256;
-	scale->blue = (scale->blue + 10) % 256;
-	return (color);
-}
-
-int	close_window(int keycode, t_vars *var)
-{
-	if (var == NULL)
-		exit (0);
-	if (keycode == KEY_ESC)
-	{
-		mlx_destroy_image(var->mlx, var->image->img);
-		mlx_destroy_window(var->mlx, var->win);
-		mlx_destroy_display(var->mlx);
-		free(var->image);
-		free(var->mlx);
-		free(var);
-		exit (0);
-	}
-	return (0);
-}
-
 int	count_column(fd)
 {
 	char	*line;
@@ -121,7 +79,7 @@ void	set_calc(t_calc *calc)
 	if (calc->start_y < calc->goal_y)
 		calc->sign_y = 1;
 	else
-		calc->sign_y = -1;	
+		calc->sign_y = -1;
 	return ;
 }
 
@@ -141,7 +99,7 @@ void	set_calc_for_slant(t_calc *calc)
 	if (calc->start_y < calc->goal_y)
 		calc->sign_y = 1;
 	else
-		calc->sign_y = -1;	
+		calc->sign_y = -1;
 	return ;
 }
 
@@ -160,7 +118,7 @@ void	set_calc_for_horizontal(t_calc *calc)
 	if (calc->start_y < calc->goal_y)
 		calc->sign_y = 1;
 	else
-		calc->sign_y = -1;	
+		calc->sign_y = -1;
 	return ;
 }
 
@@ -179,7 +137,7 @@ void	set_calc_for_vertical(t_calc *calc)
 	if (calc->start_y < calc->goal_y)
 		calc->sign_y = 1;
 	else
-		calc->sign_y = -1;	
+		calc->sign_y = -1;
 	return ;
 }
 
