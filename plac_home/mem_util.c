@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 12:45:46 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:01:45 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	error_exit(t_structs **val, int error)
 	}
 }
 
-void	free_val(t_struct **val, int error)
+void	free_val(t_structs **val, int error)
 {
 	if ((*val)->image != NULL)
 		free ((*val)->image);
@@ -62,40 +62,35 @@ void	put_error(int error)
 		ft_putstr_fd("caused by scale_in_init_elements\n", 2);
 	else if (error == 8)
 		ft_putstr_fd("caused by mlx_in_init_var\n", 2);
+	else
+		ft_putstr_fd("unknown error occured\n", 2);
 	return ;
 }
 
-//void	free_map(char ***map, int column, int row)
-//{
-//	int	count;
-//	int	i;
-//
-//	count = 0;
-//	while (count < column)
-//	{
-//		i = 0;
-//		while (i < row)
-//		{
-//			free(map[count][i]);
-//			i++;
-//		}
-//		free (map[count]);
-//		count++;
-//	}
-//	free (map);
-//	return ;
-//}
-//
-//void	free_coordinate(int **coordinate, int column)
-//{
-//	int	count;
-//
-//	count = 0;
-//	while (count < column)
-//	{
-//		free(coordinate[count]);
-//		count++;
-//	}
-//	free (coordinate);
-//	return ;
-//}
+void	free_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i] != NULL)
+	{
+		free(args[i]);
+		i++;
+	}
+	free (args);
+	return ;
+}
+
+void	free_z_map(int **z_map)
+{
+	int	count;
+
+	count = 0;
+	while (z_map[count] != NULL)
+	{
+		free(z_map[count]);
+		count++;
+	}
+	free (z_map);
+	return ;
+}

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:58:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 12:23:55 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 16:19:11 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ int	init_structs(t_structs **val)
 	if (*val == NULL)
 	{
 		error = ERR_STRUCTS_ALLOC_FAILURE;
-		error_exit(error);
+		error_exit(val, error);
 	}
-	init_mlx((*val)->var, (*val)->image);
+	init_mlx(&(*val)->var, &(*val)->image);
 	if (error != 0)
-		error_exit(error);
-	init_elements((*val)->map, (*val)->coordinate, (*val)->isol, (*val)->scale);
+		error_exit(val, error);
+	init_elements(&(*val)->map, &(*val)->coordinate, &(*val)->isol, &(*val)->scale);
 	if (error != 0)
-		error_exit(error);
-	init_var((*val)->var, (*val)->map);
+		error_exit(val, error);
+	init_var(&(*val)->var, &(*val)->map);
 	if (error != 0)
-		error_exit(error);
+		error_exit(val, error);
 	init_image((*val)->var, (*val)->map, (*val)->image);
 	return (0);
 }

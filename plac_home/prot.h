@@ -6,20 +6,21 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 13:25:16 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:02:04 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROT_H
 # define PROT_H
 
-#include "gnl.h"
+#include "get_next_line.h"
 #include "libft.h"
 #include "mlx.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <stddef.h>
 #include <math.h>
+#include <fcntl.h>
 
 #define ERR_STRUCTS_ALLOC_FAILURE 1
 #define ERR_VAR_ALLOC_FAILURE 2
@@ -85,10 +86,25 @@ typedef struct s_image
     int endian;
 } t_image;
 
+//init.c
 int	init_structs(t_structs **val);
 int	init_mlx(t_var **var, t_image **image);
 int	init_elements(t_map **map, t_3d **coordinate, t_isol **isol, t_scale **scale);
 int	init_var(t_var **var, t_map **map);
 void	init_image(t_var *var, t_map *map, t_image *image);
+
+//map.c
+void	read_map(char *file, t_map **map);
+int	count_x(char *line, char cut);
+int	count_grid(char *file, t_map **map);
+int	init_z_map(t_map **map);
+void	convert_map(t_map **map, char **args, int count);
+
+//mem_util.c
+void	error_exit(t_structs **val, int error);
+void	free_val(t_structs **val, int error);
+void	put_error(int error);
+void	free_args(char **args);
+void	free_z_map(int **z_map);
 
 #endif
