@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 11:00:20 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 12:57:10 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,7 @@
 
 int	main(void)
 {
-	var = ft_calloc(sizeof(t_var), 1);
-	if (var == NULL)
-		return (0);
-	init_var(var);
-	fd = open("./test_maps/42.fdf", O_RDONLY);
-	column = 0;
-	column = count_column(fd);
-	close(fd);
-	map = ft_calloc(sizeof(char **), column);
-	if (map == NULL)
-		return (0);
-	fd = open("./test_maps/42.fdf", O_RDONLY);
-	count = 0;
-	while (count < column)
-	{
-		line = get_next_line(fd);
-		map[count] = ft_split(line, ' ');
-		free(line);
-		count++;
-	}
-	coordinate = ft_calloc(sizeof(int *), column);
-	if (coordinate == NULL)
-	{
-		free_map(map, column, count);
-		return (0);
-	}
-	row = 0;
+		row = 0;
 	val = 0;
 	while (map[0][row] != NULL)
 		row++;

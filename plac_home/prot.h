@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prot.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/01 13:25:16 by sohyamaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PROT_H
 # define PROT_H
 
@@ -8,6 +20,27 @@
 #include <unistd.h>
 #include <stddef.h>
 #include <math.h>
+
+#define ERR_STRUCTS_ALLOC_FAILURE 1
+#define ERR_VAR_ALLOC_FAILURE 2
+#define ERR_IMAGE_ALLOC_FAILURE 3
+#define ERR_MAP_ALLOC_FAILURE 4
+#define ERR_COORDI_ALLOC_FAILURE 5
+#define ERR_ISOL_ALLOC_FAILURE 6
+#define ERR_SCALE_ALLOC_FAILURE 7
+#define ERR_MLX_ALLOC_FAILURE 8
+#define ERR_LINE_ALLOC_FAILURE 9
+#define ERR_INVALID_MAP 10
+
+typedef struct s_structs
+{
+	struct s_map *map;
+	struct s_3d	*coordinate;
+	struct s_isol *isol;
+	struct s_scale *scale;
+	struct s_var *var;
+	struct s_image *image;
+} t_structs;
 
 typedef struct s_map
 {
@@ -51,5 +84,11 @@ typedef struct s_image
     int line_length;
     int endian;
 } t_image;
+
+int	init_structs(t_structs **val);
+int	init_mlx(t_var **var, t_image **image);
+int	init_elements(t_map **map, t_3d **coordinate, t_isol **isol, t_scale **scale);
+int	init_var(t_var **var, t_map **map);
+void	init_image(t_var *var, t_map *map, t_image *image);
 
 #endif
