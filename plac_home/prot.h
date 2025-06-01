@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 18:02:04 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 20:08:07 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 typedef struct s_structs
 {
 	struct s_map *map;
-	struct s_3d	*coordinate;
-	struct s_isol *isol;
+	struct s_3d	**coordinate;
+	struct s_isol **isol;
 	struct s_scale *scale;
 	struct s_var *var;
 	struct s_image *image;
