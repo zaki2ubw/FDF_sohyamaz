@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:58:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 16:19:11 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:53:58 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,9 @@ int	init_elements(t_map **map, t_3d **coordinate, t_isol **isol, t_scale **scale
 	*map = ft_calloc(sizeof(t_map),1);
 	if (*map == NULL)
 		return (ERR_MAP_ALLOC_FAILURE);
-	*coordinate = ft_calloc(sizeof(t_3d),1);
-	if (*coordinate == NULL)
-		return (ERR_COORDI_ALLOC_FAILURE);
-	*isol = ft_calloc(sizeof(t_isol),1);
-	if (*isol == NULL)
-		return (ERR_ISOL_ALLOC_FAILURE);
-	*scale = ft_calloc(sizeof(t_scale),1);
-	if (*scale == NULL)
-		return (ERR_SCALE_ALLOC_FAILURE);
+	*coordinate = NULL;
+	*isol = NULL;
+	*scale = NULL;
 	return (0);
 }
 
