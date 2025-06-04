@@ -91,15 +91,27 @@ void	set_coordinate(t_structs *val)
 
 void	trans_isol(t_structs *val)
 {
-	int x;
-	int y;
+	int vt;
+	int hr;
 
-
-
-
-
-
-
+    val->isol = ft_calloc(sizeof(t_isol *), (val->map->width * val->map->height));
+    if (val->isol == NULL)
+        return ;
+    vt = 0;
+    while (vt < val->map->height)
+    {
+        hr = 0;
+        while (hr < val->map->width)
+        {
+            val->isol[vt][hr]->x = (val->coordinate->x - val->coordinate->y) * cos();
+            val->isol[vt][hr]->y =\
+            (val->coordinate->x + val->coordinate->y) * sin() - val->corrdinate->z;
+            hr++;
+        }
+        vt++;
+    }
+    return ;
+}
 
 
 
