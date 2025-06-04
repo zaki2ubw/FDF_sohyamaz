@@ -22,6 +22,10 @@
 #include <math.h>
 #include <fcntl.h>
 
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
+
 #define ERR_STRUCTS_ALLOC_FAILURE 1
 #define ERR_VAR_ALLOC_FAILURE 2
 #define ERR_IMAGE_ALLOC_FAILURE 3
