@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 20:08:07 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/05 22:01:13 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,23 @@
 # ifndef WINDOW_HEIGHT
 #  define WINDOW_HEIGHT 1080
 # endif
+
+# ifndef OFFSET_X
+#  define OFFSET_X WINDOW_WIDTH / 2
+# endif
+
+# ifndef OFFSET_Y
+#  define OFFSET_Y WINDOW_HEIGHT / 2
+# endif
+
+# ifndef DEFAULT_ZOOM
+#  define DEFAULT_ZOOM 20
+# endif
+
+# ifndef DEFAULT_Z_SCALE
+#  define DEFAULT_Z_SCALE 1.0
+# endif
+
 
 #define ERR_STRUCTS_ALLOC_FAILURE 1
 #define ERR_VAR_ALLOC_FAILURE 2
@@ -97,6 +114,14 @@ typedef struct s_image
     int line_length;
     int endian;
 } t_image;
+
+typedef struct s_color
+{
+	int	clear;
+	int	red;
+	int	green;
+	int blue;
+}	t_color;
 
 //init.c
 int	init_structs(t_structs **val);

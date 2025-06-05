@@ -6,147 +6,104 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:47:23 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 10:58:18 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/05 22:44:45 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prot.h"
 
-void	draw_line(t_vars *var, t_calc *calc, int color)
+void	pixel_put(t_structs *val, int x, int y, int color)
 {
-	pixel_put(var->image, calc->start_x, calc->start_y, color);
-	if (calc->delta_x == 0)
-	{
-		while (1)
-		{
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if (calc->start_y == calc->goal_y)
-				break ;
-			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
-				break ;
-			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
-				break ;
-			calc->start_y = calc->start_y + calc->sign_y;
-		}
+	char	*dst;
+
+	if (val = NULL)
 		return ;
-	}
-	else if (calc->delta_y == 0)
-	{
-		while (1)
-		{
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if (calc->start_x == calc->goal_x)
-				break ;
-			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
-				break ;
-			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
-				break ;
-			calc->start_x = calc->start_x + calc->sign_x;
-		}
+	else if (x < 0 || x > WINDOW_WIDTH || y < 0 || y > WINDOW_HEIGHT)
 		return ;
-	}
-	else if (calc->delta_x >= abs(calc->delta_y))//lower than one
-	{
-		p = 2 * abs(calc->delta_y) - abs(calc->delta_x);
-		while (1)
-		{
-			//watch and break when pixel reached the goal
-			if (calc->start_x == calc->goal_x && calc->start_y == calc->goal_y)
-				break ;
-			if (calc->start_x > calc->goal_x && calc->sign_x > 0)//x over the goal
-				break ;
-			if (calc->start_x < calc->goal_x && calc->sign_x < 0)//x under the goal
-				break ;
-			if (calc->start_y < calc->goal_y && calc->sign_y > 0)//y over the goal
-				break ;
-			if (calc->start_y > calc->goal_y && calc->sign_y < 0)//y under the goal
-				break ;
-			calc->start_x++;
-			if (calc->err < 0)//if err over the 0, one up y
-				calc->err = calc->err + 2 * calc->delta_y;
-			else
-			{
-				calc_start->y++;
-				calc_err = calc->err + calc->delta_y * 2 - calc_delta_x * 2;
-			}
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-	}
+	dst = image->addr + (y * image->line_length + x * (image->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
+
+void	bresenham(t_structs *val, t_isol *st, t_isol *gl)
+{
+	int	delta_x;
+	int	delta_y;
+
+	delta_x = gl->x - st->x;
+	delta_y = gl->y - st->y;
+	if (abs(delta_x) > abs(delta_y))
+		roop_x(delta_x, delta_y, st);
 	else
+		roop_y(delta_x, delta_y, st);
+	return ;
+}
+
+void	roop_x(int	dx, int dy, t_isol *st)
+{
+	int	err;
+	int	count;
+
+	count = 0;
+	err = 2 * dy - dx;
+	pixel_put(val, st->x, st->y, color);
+	while (count < dx)
 	{
-		p = 2 * abs(calc->delta_x) - abs(calc->delta_y);
-		while (1)
+		st->x++;
+		if (err < 0)
+			err = err + 2 * dy;
+		else
 		{
-			//watch and break when pixel reached the goal
-			if (calc->start_x == calc->goal_x && calc->start_y == calc->goal_y)
-				break ;
-			if (calc->start_x > calc->goal_x && calc->sign_x > 0)//x over the goal
-				break ;
-			if (calc->start_x < calc->goal_x && calc->sign_x < 0)//x under the goal
-				break ;
-			if (calc->start_y < calc->goal_y && calc->sign_y > 0)//y over the goal
-				break ;
-			if (calc->start_y > calc->goal_y && calc->sign_y < 0)//y under the goal
-				break ;
-			calc->start_y++;
-			if (calc->err < 0)//if err over the 0, one up x
-				calc->err = calc->err + 2 * calc->delta_x;
-			else
-			{
-				calc_start->x++;
-				calc_err = calc->err + calc->delta_x * 2 - calc_delta_y * 2;
-			}
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-	}
-	else if (calc->delta_x >= abs(calc->delta_y))
-	{
-		calc->err = calc->delta_x / 2;
-		while (1)
-		{
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
-				break ;
-			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
-				break ;
-			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
-				break ;
-			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
-				break ;
-			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
-				break ;
-			calc->start_x = calc->start_x + calc->sign_x;
-			calc->err = calc->err - abs(calc->delta_y);
-			if (calc->err < 0)
-			{
-				calc->start_y = calc->start_y + calc->sign_y;
-				calc->err = calc->err + calc->delta_x;
-			}
+			st->y++;
+			err = err + (2 * dy) - (2 * dx);
 		}
+		pixel_put(val, st->x, st->y, color);
+		count++;
 	}
-	else
+	return ;
+}
+
+void	roop_y(int	dx, int dy, t_isol *st)
+{
+	int	err;
+	int	count;
+
+	count = 0;
+	err = 2 * dx - dy;
+	pixel_put(val, st->x, st->y, color);
+	while (count < dy)
 	{
-		calc->err = abs(calc->delta_y) / 2;
-		while (calc->start_y != calc->goal_y)
+		st->y++;
+		if (err < 0)
+			err = err + 2 * dx;
+		else
 		{
-			pixel_put(var->image, calc->start_x, calc->start_y, color);
-			if ((calc->start_x == calc->goal_x) && (calc->start_y == calc->goal_y))
-				break ;
-			if (calc->sign_x > 0 && calc->start_x > calc->goal_x)
-				break ;
-			if (calc->sign_x < 0 && calc->start_x < calc->goal_x)
-				break ;
-			if (calc->sign_y > 0 && calc->start_y > calc->goal_y)
-				break ;
-			if (calc->sign_y < 0 && calc->start_y < calc->goal_y)
-				break ;
-			calc->start_y = calc->start_y + calc->sign_y;
-			calc->err = calc->err - calc->delta_x;
-			if (calc->err < 0)
-			{
-				calc->start_x = calc->start_x + calc->sign_x;
-				calc->err = calc->err + abs(calc->delta_y);
-			}
+			st->x++;
+			err = err + (2 * dx) - (2 * dy);
 		}
+		pixel_put(val, st->x, st->y, color);
+		count++;
 	}
-	pixel_put(var->image, calc->goal_x, calc->goal_y, color);
+	return ;
+}
+
+void	draw_line(t_structs *val)
+{
+	int color;
+	int	vt;
+	int	hr;
+
+	color = 0xFFFFFFFF;
+	vt = 0;
+	while (vt < val->map->height)
+	{
+		hr = 0;
+		while (hr < val->map->width)
+		{
+			bresenham(val, isol[vt][hr], isol[vt][hr + 1]);
+			bresenham(val, isol[vt][hr], isol[vt + 1][hr]);
+			hr++;
+		}
+		vt++;
+	}
 	return ;
 }

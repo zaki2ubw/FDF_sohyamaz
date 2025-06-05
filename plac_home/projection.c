@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 20:20:04 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:37:58 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ int	init_3d(t_structs *val)
 	val->isol = ft_calloc(sizeof(t_isol *), val->map->height);
 	if (val->isol == NULL)
 		return ;
-	val->scale = ft_calloc(sizeof(t_scale), 1);
-	if (val->scale == NULL)
-		return ;
 	while (y < val->map->height)
 	{
 		val->coordinate[y] = ft_calloc(sizeof(t_3d), val->map->width);
@@ -35,11 +32,23 @@ int	init_3d(t_structs *val)
 		y++;
 	}
 	if (y < val->map->height)
-		free_3d(val->coordinate, val->isol, val->scale);
+		free_3d(val->coordinate, val->isol);
 	return ;
 }
 
-void	free_3d(t_3d **coordinate, t_isol **isol, t_scale *scale)
+int	init_scale(t_structs *val)
+{
+	val->scale = ft_calloc(sizeof(t_scale), 1);
+	if (val->scale == NULL)
+		return ;
+	val->scale->zoom = DEFAULT_ZOOM;
+	val->scale->scale_z = DEFAULT_Z_SCALE;
+	val->scale->offset_x = OFFSET_X;
+	val->scale->offset_y = OFFSET_Y;
+	return ;
+}
+
+void	free_3d(t_3d **coordinate, t_isol **isol)
 {
 	int	count;
 
@@ -63,7 +72,6 @@ void	free_3d(t_3d **coordinate, t_isol **isol, t_scale *scale)
 		}
 		free(isol);
 	}
-	free (scale);
 	return ;
 }
 
@@ -106,7 +114,7 @@ void	trans_isol(t_structs *val)
             (val->coordinate[vt][hr].x - val->coordinate[vt][hr].y) * cos(rad);
             val->isol[vt][hr].y =\
             (val->coordinate[vt][hr].x + val->coordinate[vt][hr].y) * sin(rad)\
-            - val->corrdinate[vt][hr].z;
+            - val->corrdinate[vt][hr].z * val->scale->z_scale;
             hr++;
         }
         vt++;
@@ -114,7 +122,25 @@ void	trans_isol(t_structs *val)
     return ;
 }
 
+void	scale_image(t_structs *val)
+{
+	int	vt;
+	int	hr;
 
+	vt = 0;
+    while (vt < val->map->height)
+    {
+        hr = 0;
+        while (hr < val->map->width)
+        {
+            val->isol[vt][hr].x = val->isol[vt][hr].x * val->scale->zoom;
+            val->isol[vt][hr].y = val->isol[vt][hr].y * val->scale->zoom;
+            hr++;
+        }
+        vt++;
+    }
+	return ;
+}
 
 
 
