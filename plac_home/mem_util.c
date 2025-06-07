@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 19:07:26 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 20:42:59 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,3 +97,40 @@ void	free_z_map(int **z_map)
 	free (z_map);
 	return ;
 }
+
+void	free_coord(t_3d **coord)
+{
+	int	count;
+
+	count = 0;
+	if (coord != NULL)
+	{
+		while (coord[count] != NULL)
+		{
+			free(coord[count]);
+			count++;
+		}
+		free(coord);
+	}
+	return ;
+}
+
+void	free_isom(t_isom **isom)
+{
+	int	count;
+
+	count = 0;
+	if (isom != NULL)
+	{
+		while (isom[count] != NULL)
+		{
+			free(isom[count];
+			count++;
+		}
+		free(isom);
+	}
+	return ;
+}
+
+
+

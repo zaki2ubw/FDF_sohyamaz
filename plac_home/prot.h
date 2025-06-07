@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 19:52:28 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 22:17:24 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@
 #  define DEFAULT_Z_SCALE 1.0
 # endif
 
+# ifndef ISOM_ANGLE
+#  define ISOM_ANGLE M_PI / 6
+# endif
+
 #define ERR_NULL_VALUE_DETECTED 1
 #define ERR_VAL_ALLOC_FAILED 2
 #define ERR_VAR_ALLOC_FAILED 3
@@ -66,6 +70,11 @@
 #define ERR_ZVALUE_ALLOC_FAILED 14
 #define ERR_SPLIT_FAILED 15
 #define ERR_GNL_FAILED 16
+#define ERR_COORD_ALLOC_FAILED 17
+#define ERR_INIT_COORD_FAILED 18
+#define ERR_ISOM_ALLOC_FAILED 19
+#define ERR_INIT_ISOM_FAILED 20
+
 
 
 typedef struct s_structs
@@ -141,21 +150,42 @@ typedef struct s_calc
 } t_calc;
 
 //init.c
-int	init_structs(t_structs **val)
-int	init_val(t_structs **val)
-int	init_maps(t_map **map, t_3d **corrd, t_isom **isom)
-int	init_mlx(t_var **var, t_image **image, t_map **map)
-int	init_modules(t_scale **scale, t_calc **calc)
-int	init_color(t_color **palette)
-int	set_var(t_var **var, t_map **map)
-int	set_image(t_var *var, t_map *map, t_image *image)
+void	init_structs(t_structs **val);
+int		init_val(t_structs **val);
+int		init_maps(t_map **map, t_3d **corrd, t_isom **isom);
+int		init_mlx(t_var **var, t_image **image, t_map **map);
+int		init_modules(t_scale **scale, t_calc **calc);
+int		init_color(t_color **palette);
+int		set_var(t_var **var, t_map **map);
+int		set_image(t_var *var, t_map *map, t_image *image);
 
 //map.c
-void	read_map(char *file, t_map **map);
-int	count_x(char *line, char cut);
-int	count_grid(char *file, t_map **map);
-int	init_z_map(t_map **map);
-void	convert_map(t_map **map, char **args, int count);
+int		count_column(char *line, char cut);
+int		count_map_size(t_map **map, int fd);
+void	check_map_size(t_structs *val, char *file, t_map **map);
+int		convert_map(t_map **map, char **args, int count);
+int		set_map(t_map **map, int fd);
+int		init_z_map(t_map **map);
+void	read_map(t_structs *val, char *file, t_map **map);
+
+//projection.c
+int		init_coord(t_structs *val)
+int		init_isom(t_structs *val)
+int		set_scale(t_structs *val)
+int		set_coord(t_structs *val)
+int		trans_isom(t_structs *val)
+int		scale_image(t_structs *val)
+void	projection(t_structs *val)
+
+//bresenham.c
+int	set_sign(int start, int goal)
+int	set_calc(t_structs *val, t_isom *st, t_isom *gl)
+int	err_check(t_calc *calc, int *x, int *y, int err2)
+int	bresenham(t_structs *val, t_isom *st, t_isom *gl, int color)
+
+//draw.c
+int	draw_loop(t_structs *val, int vt, int color)
+void	draw_line(t_structs *val)
 
 //mem_util.c
 void	error_exit(t_structs **val, int error);

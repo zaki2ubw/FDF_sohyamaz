@@ -6,13 +6,13 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:58:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 18:04:49 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:56:50 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prot.h"
 
-int	init_structs(t_structs **val)
+void	init_structs(t_structs **val)
 {
 	int	error;
 
@@ -32,7 +32,7 @@ int	init_structs(t_structs **val)
 	error = init_mlx(&(*val)->var, &(*val)->image);
 	if (error != 0)
 		error_exit(val, error);
-	return (0);
+	return ;
 }
 
 int	init_val(t_structs **val)
