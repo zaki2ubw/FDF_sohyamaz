@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/05 22:01:13 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:03:03 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,15 @@ typedef struct s_color
 	int	green;
 	int blue;
 }	t_color;
+
+typedef struct s_calc
+{
+	int	delta_x;
+	int	delta_y;
+	int	sign_x;
+	int	sign_y;
+	int	err;
+} t_calc;
 
 //init.c
 int	init_structs(t_structs **val);
