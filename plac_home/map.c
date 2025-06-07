@@ -6,85 +6,119 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 18:01:17 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:48:16 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prot.h"
 
-void	read_map(char *file, t_map **map)
+int	count_column(char *line, char cut)
 {
-	int	error;
-	char	**args;
-	char	*line;
-	int	fd;
-	int count;
+	int	count;
+	int	column;
 
-	error = 0;
-	fd = 0;
+	column = 1;
 	count = 0;
-	error = count_grid(file, map);
-	if (error != 0)
-		return ;
-	fd = open(file, O_RDONLY);
-	error = init_z_map(map);
-	if (error != 0)
-		return ;
-	while (count < (*map)->height)
+	if (line == NULL)
+		return (0);
+	while (line[count] != '\0')
+	{
+		if (line[count] == cut)
+			column++;
+		count++;
+	}
+	return (column);
+}
+
+int	count_map_size(t_map **map, int fd)
+{
+	char	*line;
+	int		row;
+
+	row = 0;
+	if (*map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	while (1)
 	{
 		line = get_next_line(fd);
-		args = ft_split(line, ' ');
-		if (args == NULL)
-			return ;
-		convert_map(map, args, count);
+		if (line == NULL)
+			break ;
+		if (row == 0)
+		{
+			(*map)->width = count_column(line, ' ');
+			if ((*map)->width == 0)
+			{
+				free(line);
+				return (ERR_GNL_FAILED);
+			}
+		}
 		free(line);
-		free_args(args);
-		count++;
+		row++;
+	}
+	(*map)->height = row;
+	return (0);
+}
+
+void	check_map_size(t_structs *val, char *file, t_map **map)
+{
+	char	*line;
+	int		row;
+	int		fd;
+	int		error;
+
+	row = 0;
+	fd = 0;
+	error = 0;
+	if (val == NULL || file == NULL || *map == NULL)
+		error_exit(val, ERR_NULL_VALUE_DETECTED);
+	fd = open(file, O_RDONLY);
+	error = count_map_size(map, fd);
+	if (error != 0)
+	{
+		close(fd);
+		error_exit(val, error);
 	}
 	close(fd);
 	return ;
 }
 
-int	count_x(char *line, char cut)
+int	convert_map(t_map **map, char **args, int count)
 {
-	int	count;
-	int	x;
+	int	i;
 
-	x = 1;
-	count = 0;
-	while (line[count] != '\0')
+	i = 0;
+	if (*map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	while (i < (*map)->width)
 	{
-		if (line[count] == cut)
-			x++;
-		count++;
+		(*map)->z_map[count][i] = ft_atoi(args[i]);
+		i++;
 	}
-	return (x);
+	return (0);
 }
 
-int	count_grid(char *file, t_map **map)
+int	set_map(t_map **map, int fd)
 {
+	int		error;
+	char	**args;
 	char	*line;
-	int		row;
-	int		column;
-	int		fd;
+	int		count;
 
-	column = 0;
-	row = 0;
-	fd = 0;
-	fd = open(file, O_RDONLY);
-	line = NULL;
-	while (1)
+	count = 0;
+	if (file == NULL || *map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	while (count < (*map)->height)
 	{
 		line = get_next_line(fd);
-		if (line == NULL)
-			break;
-		if (column == 0)
-			(*map)->width = count_x(line, ' ');
-		free(line);
-		column++;
+		args = ft_split(line, ' ');
+		if (args == NULL)
+			return (ERR_SPLIT_FAILED);
+		error = convert_map(map, args, count);
+		if (error != 0)
+			return (error);
+		free_args(line, args);
+		count++;
 	}
-	(*map)->height = column;
-	close(fd);
 	return (0);
 }
 
@@ -95,31 +129,42 @@ int	init_z_map(t_map **map)
 	count = 0;
 	(*map)->z_map = ft_calloc(sizeof(int *), (*map)->height);
 	if ((*map)->z_map == NULL)
-		return (1);
+		return (ERR_ZMAP_ALLOC_FAILED);
 	while (count < (*map)->height)
 	{
 		(*map)->z_map[count] = ft_calloc(sizeof(int), (*map)->width);
-		if((*map)->z_map[count] == NULL)
+		if ((*map)->z_map[count] == NULL)
 		{
 			free_z_map((*map)->z_map);
-			return (1);
+			return (ERR_ZVALUE_ALLOC_FAILED);
 		}
 		count++;
 	}
 	return (0);
 }
 
-void	convert_map(t_map **map, char **args, int count)
+void	read_map(t_structs *val, char *file, t_map **map)
 {
-	int	i;
+	int		error;
+	int		fd;
+	int		count;
 
-	i = 0;
-	while (i < (*map)->width)
+	count = 0;
+	if (val == NULL || file == NULL || *map == NULL)
+		error_exit(val, ERR_NULL_VALUE_DETECTED);
+	fd = open(file, O_RDONLY);
+	error = init_z_map(map);
+	if (error != 0)
 	{
-		if (args[i] == NULL)
-			return ;
-		(*map)->z_map[count][i] = ft_atoi(args[i]);
-		i++;
+		close (fd);
+		error_exit(val, error);
 	}
+	error = set_map(map, fd);
+	if (error != 0)
+	{
+		close (fd);
+		error_exit(val, error);
+	}
+	close(fd);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 17:30:01 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:52:28 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,23 @@
 #  define DEFAULT_Z_SCALE 1.0
 # endif
 
+#define ERR_NULL_VALUE_DETECTED 1
+#define ERR_VAL_ALLOC_FAILED 2
+#define ERR_VAR_ALLOC_FAILED 3
+#define ERR_IMAGE_ALLOC_FAILED 4
+#define ERR_MAP_ALLOC_FAILED 5
+#define ERR_SCALE_ALLOC_FAILED 6
+#define ERR_CALC_ALLOC_FAILED 7
+#define ERR_COLOR_ALLOC_FAILED 8
+#define ERR_MLX_INIT_FAILED 9
+#define ERR_MLX_NEW_WINDOW_FAILED 10
+#define ERR_MLX_NEW_IMAGE_FAILED 11
+#define ERR_MLX_GET_DATA_ADDR_FAILED 12
+#define ERR_ZMAP_ALLOC_FAILED 13
+#define ERR_ZVALUE_ALLOC_FAILED 14
+#define ERR_SPLIT_FAILED 15
+#define ERR_GNL_FAILED 16
 
-#define ERR_VAL_ALLOC_FAILED 1
-#define ERR_VAR_ALLOC_FAILED 2
-#define ERR_IMAGE_ALLOC_FAILED 3
-#define ERR_MAP_ALLOC_FAILED 4
-#define ERR_SCALE_ALLOC_FAILED 5
-#define ERR_CALC_ALLOC_FAILED 6
-#define ERR_COLOR_ALLOC_FAILED 7
-#define ERR_MLX_INIT_FAILED 8
-#define ERR_MLX_NEW_WINDOW_FAILED 9
-#define ERR_MLX_NEW_IMAGE_FAILED 10
-#define ERR_MLX_GET_DATA_ADDR_FAILED 11
 
 typedef struct s_structs
 {
@@ -136,11 +141,14 @@ typedef struct s_calc
 } t_calc;
 
 //init.c
-int	init_structs(t_structs **val);
-int	init_mlx(t_var **var, t_image **image);
-int	init_elements(t_map **map, t_3d **corrd, t_isom **isom, t_scale **scale);
-int	init_var(t_var **var, t_map **map);
-void	init_image(t_var *var, t_map *map, t_image *image);
+int	init_structs(t_structs **val)
+int	init_val(t_structs **val)
+int	init_maps(t_map **map, t_3d **corrd, t_isom **isom)
+int	init_mlx(t_var **var, t_image **image, t_map **map)
+int	init_modules(t_scale **scale, t_calc **calc)
+int	init_color(t_color **palette)
+int	set_var(t_var **var, t_map **map)
+int	set_image(t_var *var, t_map *map, t_image *image)
 
 //map.c
 void	read_map(char *file, t_map **map);

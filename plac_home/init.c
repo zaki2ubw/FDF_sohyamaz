@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:58:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 17:53:28 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 18:04:49 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ int	init_structs(t_structs **val)
 
 int	init_val(t_structs **val)
 {
-	*val = ft_calloc(sizeof(t_structs),1);
+	*val = ft_calloc(sizeof(t_structs), 1);
 	if (*val == NULL)
 		return (ERR_VAL_ALLOC_FAILED);
 	return (0);
-}	
+}
 
 int	init_maps(t_map **map, t_3d **corrd, t_isom **isom)
 {
-	*map = ft_calloc(sizeof(t_map),1);
+	*map = ft_calloc(sizeof(t_map), 1);
 	if (*map == NULL)
 		return (ERR_MAP_ALLOC_FAILED);
 	*corrd = NULL;
@@ -58,10 +58,10 @@ int	init_mlx(t_var **var, t_image **image, t_map **map)
 	int	error;
 
 	error = 0;
-	*var = ft_calloc(sizeof(t_var),1);
+	*var = ft_calloc(sizeof(t_var), 1);
 	if (*var == NULL)
 		return (ERR_VAR_ALLOC_FAILED);
-	*image = ft_calloc(sizeof(t_image),1);
+	*image = ft_calloc(sizeof(t_image), 1);
 	if (*image == NULL)
 		return (ERR_IMAGE_ALLOC_FAILED);
 	error = set_var(var, map);
@@ -90,7 +90,7 @@ int	init_color(t_color **palette)
 	if (*palette == NULL)
 		return (ERR_COLOR_ALLOC_FAILED);
 	return (0);
-} 
+}
 
 int	set_var(t_var **var, t_map **map)
 {
@@ -99,8 +99,8 @@ int	set_var(t_var **var, t_map **map)
 	(*var)->mlx = mlx_init();
 	if ((*var)->mlx == NULL)
 		return (ERR_MLX_INIT_FAILED);
-	(*var)->win = mlx_new_window((*var)->mlx, (*map)->width,\
-	 (*map)->height, "Hello_fdf!!");
+	(*var)->win = mlx_new_window((*var)->mlx, (*map)->width, \
+	(*map)->height, "Hello_fdf!!");
 	if ((*var)->win == NULL)
 		return (ERR_MLX_NEW_WINDOW_FAILED);
 	return (0);
@@ -111,7 +111,7 @@ int	set_image(t_var *var, t_map *map, t_image *image)
 	image->img = mlx_new_image(var->mlx, map->width, map->height);
 	if (image->img == NULL)
 		return (ERR_MLX_NEW_IMAGE_FAILED);
-	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel,\
+	image->addr = mlx_get_data_addr(image->img, &image->bits_per_pixel, \
 	&image->line_length, &image->endian);
 	if (image->addr == NULL)
 		return (ERR_GET_DATA_ADDR_FAILED);

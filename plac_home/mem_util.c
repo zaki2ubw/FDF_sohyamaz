@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 18:01:45 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 19:07:26 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	put_error(int error)
 	return ;
 }
 
-void	free_args(char **args)
+void	free_args(char *line, char **args)
 {
 	int	i;
 
@@ -77,7 +77,10 @@ void	free_args(char **args)
 		free(args[i]);
 		i++;
 	}
-	free (args);
+	if (line != NULL)
+		free (line);
+	if (args != NULL)
+		free (args);
 	return ;
 }
 
