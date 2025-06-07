@@ -6,144 +6,166 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/05 20:37:58 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:03:04 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	init_3d(t_structs *val)
+#include "prot.h"
+
+int	init_coord(t_structs *val)
 {
-	int y;
+	int	y;
 
 	y = 0;
-	val->coordinate = ft_calloc(sizeof(t_3d *), val->map->height);
-	if (val->coordinate == NULL)
-		return ;
-	val->isol = ft_calloc(sizeof(t_isol *), val->map->height);
-	if (val->isol == NULL)
-		return ;
+	if (val == NULL || val->map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	val->coord = ft_calloc(sizeof(t_3d *), val->map->height);
+	if (val->coord == NULL)
+		return (ERR_COORD_ALLOC_FAILED);
 	while (y < val->map->height)
 	{
-		val->coordinate[y] = ft_calloc(sizeof(t_3d), val->map->width);
-		if (val->coordinate[y] == NULL)
-			break ;
-		val->isol[y] = ft_calloc(sizeof(t_isol), val->map->width);
-		if (val->isol[y] == NULL)
+		val->coord[y] = ft_calloc(sizeof(t_3d), val->map->width);
+		if (val->coord[y] == NULL)
 			break ;
 		y++;
 	}
 	if (y < val->map->height)
-		free_3d(val->coordinate, val->isol);
-	return ;
+	{
+		free_coord(val->coord);
+		return (ERR_INIT_COORD_FAILED);
+	}
+	return (0);
 }
 
-int	init_scale(t_structs *val)
+int	init_isom(t_structs *val)
 {
-	val->scale = ft_calloc(sizeof(t_scale), 1);
-	if (val->scale == NULL)
-		return ;
+	int	y;
+
+	y = 0;
+	if (val == NULL || val->map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	val->isom = ft_calloc(sizeof(t_isom *), val->map->height);
+	if (val->isom == NULL)
+		return (ERR_ISOM_ALLOC_FAILED);
+	while (y < val->map->height)
+	{
+		val->isom[y] = ft_calloc(sizeof(t_isom), val->map->width);
+		if (val->isom[y] == NULL)
+			break ;
+		y++;
+	}
+	if (y < val->map->height)
+	{
+		free_isom(val->isom);
+		return (ERR_INIT_ISOM_FAILED);
+	}
+	return (0);
+}
+
+void	set_scale(t_structs *val)
+{
 	val->scale->zoom = DEFAULT_ZOOM;
-	val->scale->scale_z = DEFAULT_Z_SCALE;
+	val->scale->z_scale = DEFAULT_Z_SCALE;
 	val->scale->offset_x = OFFSET_X;
 	val->scale->offset_y = OFFSET_Y;
 	return ;
 }
 
-void	free_3d(t_3d **coordinate, t_isol **isol)
-{
-	int	count;
-
-	count = 0;
-	if (coordinate != NULL)
-	{
-		while (coordinate[count] != NULL)
-		{
-			free(coordinate[count];
-			count++;
-		}
-		free(coordinate);
-	}
-	count = 0;
-	if (isol != NULL)
-	{
-		while (isol[count] != NULL)
-		{
-			free(isol[count];
-			count++;
-		}
-		free(isol);
-	}
-	return ;
-}
-
-void	set_coordinate(t_structs *val)
+int	set_coord(t_structs *val)
 {
 	int	x;
 	int	y;
 
 	x = 0;
 	y = 0;
+	if (val == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
 	while (y < val->map->height)
 	{
 		x = 0;
 		while (x < val->map->width)
 		{
-			val->coordinate[y][x].z = val->map->z_map[y][x];
-			val->coordinate[y][x].y = y;
-			val->coordinate[y][x].x = x;
+			val->coord[y][x].z = val->map->z_map[y][x];
+			val->coord[y][x].y = y;
+			val->coord[y][x].x = x;
 			x++;
 		}
 		y++;
 	}
-	return ;
+	return (0);
 }
 
-void	trans_isol(t_structs *val)
+int	trans_isom(t_structs *val)
 {
-	int vt;
-	int hr;
-    double  rad;
+	int		vt;
+	int		hr;
+	double	rad;
 
-    vt = 0;
-    rad = M_PI / 6;
-    while (vt < val->map->height)
-    {
-        hr = 0;
-        while (hr < val->map->width)
-        {
-            val->isol[vt][hr].x =\
-            (val->coordinate[vt][hr].x - val->coordinate[vt][hr].y) * cos(rad);
-            val->isol[vt][hr].y =\
-            (val->coordinate[vt][hr].x + val->coordinate[vt][hr].y) * sin(rad)\
-            - val->corrdinate[vt][hr].z * val->scale->z_scale;
-            hr++;
-        }
-        vt++;
-    }
-    return ;
+	vt = 0;
+	rad = ISOM_ANGLE;
+	if (val == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	while (vt < val->map->height)
+	{
+		hr = 0;
+		while (hr < val->map->width)
+		{
+			val->isom[vt][hr].x = \
+			(val->coord[vt][hr].x - val->coord[vt][hr].y) * cos(rad);
+			val->isom[vt][hr].y = \
+			(val->coord[vt][hr].x + val->coord[vt][hr].y) * sin(rad) \
+			- val->coord[vt][hr].z * val->scale->z_scale;
+			hr++;
+		}
+		vt++;
+	}
+	return (0);
 }
 
-void	scale_image(t_structs *val)
+int	scale_image(t_structs *val)
 {
 	int	vt;
 	int	hr;
 
 	vt = 0;
-    while (vt < val->map->height)
-    {
-        hr = 0;
-        while (hr < val->map->width)
-        {
-            val->isol[vt][hr].x = val->isol[vt][hr].x * val->scale->zoom;
-            val->isol[vt][hr].y = val->isol[vt][hr].y * val->scale->zoom;
-            hr++;
-        }
-        vt++;
-    }
-	return ;
+	if (val == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	while (vt < val->map->height)
+	{
+		hr = 0;
+		while (hr < val->map->width)
+		{
+			val->isom[vt][hr].x = val->isom[vt][hr].x * val->scale->zoom;
+			val->isom[vt][hr].y = val->isom[vt][hr].y * val->scale->zoom;
+			hr++;
+		}
+		vt++;
+	}
+	return (0);
 }
 
+void	projection(t_structs *val)
+{
+	int	error;
 
-
-
-
-
+	error = 0;
+	error = init_coord(val);
+	if (error != 0)
+		error_exit(val, error);
+	error = init_isom(val);
+	if (error != 0)
+		error_exit(val, error);
+	error = set_scale(val);
+	if (error != 0)
+		error_exit(val, error);
+	error = set_coord(val);
+	if (error != 0)
+		error_exit(val, error);
+	error = trans_isom(val);
+	if (error != 0)
+		error_exit(val, error);
+	error = scale_image(val);
+	if (error != 0)
+		error_exit(val, error);
+	return ;
+}
