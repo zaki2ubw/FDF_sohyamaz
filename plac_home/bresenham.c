@@ -6,25 +6,11 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:47:23 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 14:22:38 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 16:25:08 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "prot.h"
-
-void	pixel_put(t_structs *val, int x, int y, int color)
-{
-	char	*dst;
-
-	if (val == NULL)
-		return ;
-	else if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
-		return ;
-	dst = val->image->addr
-	+ y * val->image->line_length
-	+ x * (val->image->bits_per_pixel / 8);
-	*(unsigned int *)dst = color;
-}
 
 int	set_sign(int start, int goal)
 {
@@ -70,29 +56,5 @@ void	bresenham(t_structs *val, t_isol *st, t_isol *gl, int color)
 		}
 	}
 	pixel_put(val, gl->x, gl->y, color);
-	return ;
-}
-
-void	draw_line(t_structs *val)
-{
-	int	vt;
-	int	hr;
-	int color;
-
-	color = 0xFFFFFFFF;
-	vt = 0;
-	while (vt < val->map->height)
-	{
-		hr = 0;
-		while (hr < val->map->width)
-		{
-			if (hr < val->map->width - 1)
-				bresenham(val, val->isol[vt][hr], val->isol[vt][hr + 1], color);
-			if (vt < val->map->height - 1)
-				bresenham(val, val->isol[vt][hr], val->isol[vt + 1][hr], color);
-			hr++;
-		}
-		vt++;
-	}
 	return ;
 }

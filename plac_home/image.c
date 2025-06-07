@@ -6,18 +6,22 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:19 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/01 10:54:01 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 15:50:39 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	pixel_put(t_data *data, int x, int y, int color)
+#include "prot.h"
+
+void	pixel_put(t_structs *val, int x, int y, int color)
 {
 	char	*dst;
 
-	if (data == NULL)
-		exit (0);
-	else if (x < 0 || x >= 1920 || y < 0 || y >= 1080)
+	if (val == NULL)
 		return ;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	else if (x < 0 || x >= WINDOW_WIDTH || y < 0 || y >= WINDOW_HEIGHT)
+		return ;
+	dst = val->image->addr
+	+ y * val->image->line_length
+	+ x * (val->image->bits_per_pixel / 8);
 	*(unsigned int *)dst = color;
 }

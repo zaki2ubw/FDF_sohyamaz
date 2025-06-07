@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 14:03:03 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:30:01 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,28 @@
 # endif
 
 
-#define ERR_STRUCTS_ALLOC_FAILURE 1
-#define ERR_VAR_ALLOC_FAILURE 2
-#define ERR_IMAGE_ALLOC_FAILURE 3
-#define ERR_MAP_ALLOC_FAILURE 4
-#define ERR_COORDI_ALLOC_FAILURE 5
-#define ERR_ISOL_ALLOC_FAILURE 6
-#define ERR_SCALE_ALLOC_FAILURE 7
-#define ERR_MLX_ALLOC_FAILURE 8
-#define ERR_LINE_ALLOC_FAILURE 9
-#define ERR_INVALID_MAP 10
+#define ERR_VAL_ALLOC_FAILED 1
+#define ERR_VAR_ALLOC_FAILED 2
+#define ERR_IMAGE_ALLOC_FAILED 3
+#define ERR_MAP_ALLOC_FAILED 4
+#define ERR_SCALE_ALLOC_FAILED 5
+#define ERR_CALC_ALLOC_FAILED 6
+#define ERR_COLOR_ALLOC_FAILED 7
+#define ERR_MLX_INIT_FAILED 8
+#define ERR_MLX_NEW_WINDOW_FAILED 9
+#define ERR_MLX_NEW_IMAGE_FAILED 10
+#define ERR_MLX_GET_DATA_ADDR_FAILED 11
 
 typedef struct s_structs
 {
 	struct s_map *map;
-	struct s_3d	**coordinate;
-	struct s_isol **isol;
+	struct s_3d	**corrd;
+	struct s_isom **isom;
 	struct s_scale *scale;
 	struct s_var *var;
 	struct s_image *image;
+	struct s_color *palette;
+	struct s_calc *calc;
 } t_structs;
 
 typedef struct s_map
@@ -86,11 +89,11 @@ typedef struct s_3d
     int z;
 } t_3d;
 
-typedef struct s_isol
+typedef struct s_isom
 {
     int x;
     int y;
-} t_isol;
+} t_isom;
 
 typedef struct s_scale
 {
@@ -135,7 +138,7 @@ typedef struct s_calc
 //init.c
 int	init_structs(t_structs **val);
 int	init_mlx(t_var **var, t_image **image);
-int	init_elements(t_map **map, t_3d **coordinate, t_isol **isol, t_scale **scale);
+int	init_elements(t_map **map, t_3d **corrd, t_isom **isom, t_scale **scale);
 int	init_var(t_var **var, t_map **map);
 void	init_image(t_var *var, t_map *map, t_image *image);
 
