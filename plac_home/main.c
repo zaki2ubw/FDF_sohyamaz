@@ -26,8 +26,8 @@ int	main(int argc, char **argv)
 	road_map(val, argv[1], val->map);
 	projection(val);
 	draw_line(val);
-	//mlx_roop?
-	//free_all?
+    mlx_loop(val->mlx);
+    //free_all?
 	//event_hook???
 	return (0);
-}	
+}
