@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:47:23 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 21:48:33 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 20:29:28 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,49 @@ int	set_calc(t_structs *val, t_isom *st, t_isom *gl)
 {
 	if (val == NULL || st == NULL || gl == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
+	val->calc->x = st->x;
+	val->calc->y = st->y;
 	val->calc->delta_x = abs(gl->x - st->x);
 	val->calc->delta_y = abs(gl->y - st->y);
-	val->calc->err = val->calc->delta_x - val->calc->delta_y;
 	val->calc->sign_x = set_sign(st->x, gl->x);
 	val->calc->sign_y = set_sign(st->y, gl->y);
 	return (0);
 }
 
-int	err_check(t_calc *calc, int *x, int *y, int err2)
+int	err_check_x(t_structs *val, t_calc *calc, t_isom *gl, int color)
 {
 	if (calc == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
-	if (err2 >= -calc->delta_y)
+	calc->err = calc->delta_x / 2;
+	while (calc->x != gl->x)
 	{
-		calc->err = calc->err + calc->delta_y;
-		*x = *x + calc->sign_x;
+		pixel_put(val, calc->x, calc->y, color); 
+		calc->x = calc->x + calc->sign_x;
+		calc->err = calc->err - calc->delta_y;
+		if (calc->err < 0)
+		{
+			calc->y = calc->y + calc->sign_y;
+			calc->err = calc->err + calc->delta_x;
+		}
 	}
-	if (err2 < calc->delta_x)
+	return (0);
+}
+
+int	err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color)
+{
+	if (calc == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	calc->err = calc->delta_y / 2;
+	while (calc->y != gl->y)
 	{
-		calc->err = calc->err + calc->delta_x;
-		*y = *y + calc->sign_y;
+		pixel_put(val, calc->x, calc->y, color); 
+		calc->y = calc->y + calc->sign_y;
+		calc->err = calc->err - calc->delta_x;
+		if (calc->err < 0)
+		{
+			calc->x = calc->x + calc->sign_x;
+			calc->err = calc->err + calc->delta_y;
+		}
 	}
 	return (0);
 }
@@ -57,24 +79,25 @@ int	bresenham(t_structs *val, t_isom *st, t_isom *gl, int color)
 {
 	int	x;
 	int	y;
-	int	err2;
 	int	error;
 
 	x = st->x;
 	y = st->y;
-	error = 0;
-	err2 = set_calc(val, st, gl);
-	if (err2 != 0)
-		return (err2);
-	while (1)
+	error = set_calc(val, st, gl);
+	if (error != 0)
+		return (error);
+	if (val->calc->delta_x >= val->calc->delta_y)
 	{
-		pixel_put(val, x, y, color);
-		if (x == gl->x && y == gl->y)
-			break ;
-		err2 = val->calc->err * 2;
-		error = err_check(val->calc, &x, &y, err2);
+		error = err_check_x(val, val->calc, gl, color);
 		if (error == ERR_NULL_VALUE_DETECTED)
 			return (error);
 	}
+	else
+	{
+		error = err_check_y(val, val->calc, gl, color);
+		if (error == ERR_NULL_VALUE_DETECTED)
+			return (error);
+	}
+	pixel_put(val, gl->x, gl->y, color);
 	return (0);
 }
