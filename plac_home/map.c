@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 19:48:16 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 14:48:38 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	count_map_size(t_map **map, int fd)
 
 void	check_map_size(t_structs *val, char *file, t_map **map)
 {
-	char	*line;
 	int		row;
 	int		fd;
 	int		error;
@@ -70,13 +69,13 @@ void	check_map_size(t_structs *val, char *file, t_map **map)
 	fd = 0;
 	error = 0;
 	if (val == NULL || file == NULL || *map == NULL)
-		error_exit(val, ERR_NULL_VALUE_DETECTED);
+		error_exit(&val, ERR_NULL_VALUE_DETECTED);
 	fd = open(file, O_RDONLY);
 	error = count_map_size(map, fd);
 	if (error != 0)
 	{
 		close(fd);
-		error_exit(val, error);
+		error_exit(&val, error);
 	}
 	close(fd);
 	return ;
@@ -105,7 +104,7 @@ int	set_map(t_map **map, int fd)
 	int		count;
 
 	count = 0;
-	if (file == NULL || *map == NULL)
+	if (*map == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
 	while (count < (*map)->height)
 	{
@@ -151,19 +150,19 @@ void	read_map(t_structs *val, char *file, t_map **map)
 
 	count = 0;
 	if (val == NULL || file == NULL || *map == NULL)
-		error_exit(val, ERR_NULL_VALUE_DETECTED);
+		error_exit(&val, ERR_NULL_VALUE_DETECTED);
 	fd = open(file, O_RDONLY);
 	error = init_z_map(map);
 	if (error != 0)
 	{
 		close (fd);
-		error_exit(val, error);
+		error_exit(&val, error);
 	}
 	error = set_map(map, fd);
 	if (error != 0)
 	{
 		close (fd);
-		error_exit(val, error);
+		error_exit(&val, error);
 	}
 	close(fd);
 	return ;
