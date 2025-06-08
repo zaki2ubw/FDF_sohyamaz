@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:58:31 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 19:56:50 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 14:19:26 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,16 @@ void	init_structs(t_structs **val)
 	error = init_val(&(*val));
 	if (error != 0)
 		error_exit(val, error);
-	error = init_maps(&(*val)->map, &(*val)->corrd, &(*val)->isom);
+	error = init_maps(*val);
 	if (error != 0)
 		error_exit(val, error);
-	error = init_modules(&(*val)->scale, &(*val)->calc);
+	error = init_modules(*val);
 	if (error != 0)
 		error_exit(val, error);
-	error = init_color(&(*val)->palette);
+	error = init_color(*val);
 	if (error != 0)
 		error_exit(val, error);
-	error = init_mlx(&(*val)->var, &(*val)->image);
+	error = init_mlx(*val);
 	if (error != 0)
 		error_exit(val, error);
 	return ;
@@ -43,51 +43,51 @@ int	init_val(t_structs **val)
 	return (0);
 }
 
-int	init_maps(t_map **map, t_3d **corrd, t_isom **isom)
+int	init_maps(t_structs *val)
 {
-	*map = ft_calloc(sizeof(t_map), 1);
-	if (*map == NULL)
+	val->map = ft_calloc(sizeof(t_map), 1);
+	if (val->map == NULL)
 		return (ERR_MAP_ALLOC_FAILED);
-	*corrd = NULL;
-	*isom = NULL;
+	val->corrd = NULL;
+	val->isom = NULL;
 	return (0);
 }
 
-int	init_mlx(t_var **var, t_image **image, t_map **map)
+int	init_mlx(t_structs *val)
 {
 	int	error;
 
 	error = 0;
-	*var = ft_calloc(sizeof(t_var), 1);
-	if (*var == NULL)
+	val->var = ft_calloc(sizeof(t_var), 1);
+	if (val->var == NULL)
 		return (ERR_VAR_ALLOC_FAILED);
-	*image = ft_calloc(sizeof(t_image), 1);
-	if (*image == NULL)
+	val->image = ft_calloc(sizeof(t_image), 1);
+	if (val->image == NULL)
 		return (ERR_IMAGE_ALLOC_FAILED);
-	error = set_var(var, map);
+	error = set_var(&val->var, &val->map);
 	if (error != 0)
 		return (error);
-	error = set_image(var, map, image);
+	error = set_image(val->var, val->map, val->image);
 	if (error != 0)
 		return (error);
 	return (0);
 }
 
-int	init_modules(t_scale **scale, t_calc **calc)
+int	init_modules(t_structs *val)
 {
-	*scale = ft_calloc(sizeof(t_scale), 1);
-	if (*scale == NULL)
+	val->scale = ft_calloc(sizeof(t_scale), 1);
+	if (val->scale == NULL)
 		return (ERR_SCALE_ALLOC_FAILED);
-	*calc = ft_calloc(sizeof(t_calc), 1);
-	if (*calc == NULL)
+	val->calc = ft_calloc(sizeof(t_calc), 1);
+	if (val->calc == NULL)
 		return (ERR_CALC_ALLOC_FAILED);
 	return (0);
 }
 
-int	init_color(t_color **palette)
+int	init_color(t_structs *val)
 {
-	*palette = ft_calloc(sizeof(t_color), 1);
-	if (*palette == NULL)
+	val->palette = ft_calloc(sizeof(t_color), 1);
+	if (val->palette == NULL)
 		return (ERR_COLOR_ALLOC_FAILED);
 	return (0);
 }
