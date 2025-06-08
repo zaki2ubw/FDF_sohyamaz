@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 21:03:04 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:52:34 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ int	init_isom(t_structs *val)
 
 void	set_scale(t_structs *val)
 {
+	if (val == NULL)
+		exit(ERR_NULL_VALUE_DETECTED);
 	val->scale->zoom = DEFAULT_ZOOM;
 	val->scale->z_scale = DEFAULT_Z_SCALE;
 	val->scale->offset_x = OFFSET_X;
@@ -100,8 +102,12 @@ int	trans_isom(t_structs *val)
 	int		vt;
 	int		hr;
 	double	rad;
+	double	temp;
 
 	vt = 0;
+	printf("sizeof(z) = %lu\n", sizeof(val->coord[vt][hr].z));
+	printf("def_z_scale = %f\n", DEFAULT_Z_SCALE);
+	printf("z_scale = %f\n", val->scale->z_scale);
 	rad = ISOM_ANGLE;
 	if (val == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
@@ -110,11 +116,16 @@ int	trans_isom(t_structs *val)
 		hr = 0;
 		while (hr < val->map->width)
 		{
-			val->isom[vt][hr].x = \
-			(val->coord[vt][hr].x - val->coord[vt][hr].y) * cos(rad);
-			val->isom[vt][hr].y = \
-			(val->coord[vt][hr].x + val->coord[vt][hr].y) * sin(rad) \
-			- val->coord[vt][hr].z * val->scale->z_scale;
+			//temp = (val->coord[vt][hr].x - val->coord[vt][hr].y) * cos(rad);
+			temp = (val->coord[vt][hr].x - val->coord[vt][hr].y) * 0.866;
+			val->isom[vt][hr].x = (int)temp;
+			temp = (val->coord[vt][hr].x + val->coord[vt][hr].y)\
+			* 0.5 - ((double)val->coord[vt][hr].z * 0.5);
+			//* sin(rad) - ((double)val->coord[vt][hr].z * 0.5);
+			//* sin(rad) - ((double)val->coord[vt][hr].z * val->scale->z_scale);
+			val->isom[vt][hr].y = (int)temp;
+			printf("z = %d\n", val->coord[vt][hr].z);
+			printf("z = %f\n", val->coord[vt][hr].z * val->scale->z_scale);
 			hr++;
 		}
 		vt++;
@@ -130,13 +141,18 @@ int	scale_image(t_structs *val)
 	vt = 0;
 	if (val == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
+	set_scale(val);
 	while (vt < val->map->height)
 	{
 		hr = 0;
 		while (hr < val->map->width)
 		{
-			val->isom[vt][hr].x = val->isom[vt][hr].x * val->scale->zoom;
-			val->isom[vt][hr].y = val->isom[vt][hr].y * val->scale->zoom;
+			val->isom[vt][hr].x =\
+			val->isom[vt][hr].x * val->scale->zoom + val->scale->offset_x;
+			val->isom[vt][hr].y =\
+			val->isom[vt][hr].y * val->scale->zoom + val->scale->offset_y;
+			printf("isom[%d][%d] = (%d, %d)\n", vt, hr,\
+			val->isom[vt][hr].x, val->isom[vt][hr].y);
 			hr++;
 		}
 		vt++;
@@ -151,21 +167,18 @@ void	projection(t_structs *val)
 	error = 0;
 	error = init_coord(val);
 	if (error != 0)
-		error_exit(val, error);
+		error_exit(&val, error);
 	error = init_isom(val);
 	if (error != 0)
-		error_exit(val, error);
-	error = set_scale(val);
-	if (error != 0)
-		error_exit(val, error);
+		error_exit(&val, error);
 	error = set_coord(val);
 	if (error != 0)
-		error_exit(val, error);
+		error_exit(&val, error);
 	error = trans_isom(val);
 	if (error != 0)
-		error_exit(val, error);
+		error_exit(&val, error);
 	error = scale_image(val);
 	if (error != 0)
-		error_exit(val, error);
+		error_exit(&val, error);
 	return ;
 }

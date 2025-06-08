@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 22:17:24 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 21:45:59 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 #include <stddef.h>
 #include <math.h>
 #include <fcntl.h>
+
+# ifndef KEY_ESC
+#  define KEY_ESC 65307
+# endif
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -43,11 +47,11 @@
 # endif
 
 # ifndef DEFAULT_ZOOM
-#  define DEFAULT_ZOOM 20
+#  define DEFAULT_ZOOM 30
 # endif
 
 # ifndef DEFAULT_Z_SCALE
-#  define DEFAULT_Z_SCALE 1.0
+#  define DEFAULT_Z_SCALE 10.0
 # endif
 
 # ifndef ISOM_ANGLE
@@ -74,13 +78,14 @@
 #define ERR_INIT_COORD_FAILED 18
 #define ERR_ISOM_ALLOC_FAILED 19
 #define ERR_INIT_ISOM_FAILED 20
+#define ERR_GET_DATA_ADDR_FAILED 21
 
 
 
 typedef struct s_structs
 {
 	struct s_map *map;
-	struct s_3d	**corrd;
+	struct s_3d	**coord;
 	struct s_isom **isom;
 	struct s_scale *scale;
 	struct s_var *var;
@@ -111,8 +116,8 @@ typedef struct s_isom
 
 typedef struct s_scale
 {
-    float zoom;
-    float z_scale;
+    double zoom;
+    double z_scale;
     int offset_x;
     int offset_y;
 } t_scale;
@@ -142,6 +147,8 @@ typedef struct s_color
 
 typedef struct s_calc
 {
+	int x;
+	int	y;
 	int	delta_x;
 	int	delta_y;
 	int	sign_x;
@@ -149,15 +156,36 @@ typedef struct s_calc
 	int	err;
 } t_calc;
 
+//bresenham.c
+int		set_sign(int start, int goal);
+int		set_calc(t_structs *val, t_isom *st, t_isom *gl);
+int		err_check_x(t_structs *val, t_calc *calc, t_isom *gl, int color);
+int		err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color);
+int		bresenham(t_structs *val, t_isom *st, t_isom *gl, int color);
+
+//color.c
+int		color_init(t_color *palette);
+
+//draw.c
+int		draw_loop(t_structs *val, int vt, int color);
+void	draw_line(t_structs *val);
+
+//event.c
+int		close_window(int keycode, t_structs *val);
+
+//image.c
+void	create_window(t_structs *val);
+int		set_var(t_var **var);
+int		set_image(t_var *var, t_image *image);
+void	pixel_put(t_structs *val, int x, int y, int color);
+
 //init.c
 void	init_structs(t_structs **val);
 int		init_val(t_structs **val);
-int		init_maps(t_map **map, t_3d **corrd, t_isom **isom);
-int		init_mlx(t_var **var, t_image **image, t_map **map);
-int		init_modules(t_scale **scale, t_calc **calc);
-int		init_color(t_color **palette);
-int		set_var(t_var **var, t_map **map);
-int		set_image(t_var *var, t_map *map, t_image *image);
+int		init_maps(t_structs *val);
+int		init_mlx(t_structs *val);
+int		init_modules(t_structs *val);
+int		init_color(t_structs *val);
 
 //map.c
 int		count_column(char *line, char cut);
@@ -168,30 +196,22 @@ int		set_map(t_map **map, int fd);
 int		init_z_map(t_map **map);
 void	read_map(t_structs *val, char *file, t_map **map);
 
-//projection.c
-int		init_coord(t_structs *val)
-int		init_isom(t_structs *val)
-int		set_scale(t_structs *val)
-int		set_coord(t_structs *val)
-int		trans_isom(t_structs *val)
-int		scale_image(t_structs *val)
-void	projection(t_structs *val)
-
-//bresenham.c
-int	set_sign(int start, int goal)
-int	set_calc(t_structs *val, t_isom *st, t_isom *gl)
-int	err_check(t_calc *calc, int *x, int *y, int err2)
-int	bresenham(t_structs *val, t_isom *st, t_isom *gl, int color)
-
-//draw.c
-int	draw_loop(t_structs *val, int vt, int color)
-void	draw_line(t_structs *val)
-
 //mem_util.c
 void	error_exit(t_structs **val, int error);
-void	free_val(t_structs **val, int error);
+void	free_val(t_structs **val);
 void	put_error(int error);
-void	free_args(char **args);
+void	free_args(char *line, char **args);
 void	free_z_map(int **z_map);
+void	free_coord(t_3d **coord);
+void	free_isom(t_isom **isom);
+
+//projection.c
+int		init_coord(t_structs *val);
+int		init_isom(t_structs *val);
+void	set_scale(t_structs *val);
+int		set_coord(t_structs *val);
+int		trans_isom(t_structs *val);
+int		scale_image(t_structs *val);
+void	projection(t_structs *val);
 
 #endif

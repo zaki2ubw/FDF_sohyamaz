@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 22:18:27 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 19:17:27 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv)
 {
-	t_struct	*val;
+	t_structs	*val;
 
 	if (argc != 2)
 	{
@@ -22,11 +22,12 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	init_structs(&val);
-	check_map_size(val, argv[1], val->map);
-	road_map(val, argv[1], val->map);
+	check_map_size(val, argv[1], &val->map);
+	read_map(val, argv[1], &val->map);
+	create_window(val);
 	projection(val);
 	draw_line(val);
-    mlx_loop(val->mlx);
+    mlx_loop(val->var->mlx);
     //free_all?
 	//event_hook???
 	return (0);

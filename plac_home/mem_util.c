@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 20:42:59 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 13:43:15 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	error_exit(t_structs **val, int error)
 		exit(error);
 	else
 	{
-		free_val(val, error);
+		free_val(val);
 		*val = NULL;
 		exit(error);
 	}
 }
 
-void	free_val(t_structs **val, int error)
+void	free_val(t_structs **val)
 {
 	if ((*val)->image != NULL)
 		free ((*val)->image);
@@ -33,10 +33,10 @@ void	free_val(t_structs **val, int error)
 		free ((*val)->var);
 	if ((*val)->scale != NULL)
 		free ((*val)->scale);
-	if ((*val)->isol != NULL)
-		free ((*val)->isol);
-	if ((*val)->coordinate != NULL)
-		free ((*val)->coordinate);
+	if ((*val)->isom != NULL)
+		free ((*val)->isom);
+	if ((*val)->coord != NULL)
+		free ((*val)->coord);
 	if ((*val)->map != NULL)
 		free ((*val)->map);
 	free (*val);
@@ -124,13 +124,10 @@ void	free_isom(t_isom **isom)
 	{
 		while (isom[count] != NULL)
 		{
-			free(isom[count];
+			free(isom[count]);
 			count++;
 		}
 		free(isom);
 	}
 	return ;
 }
-
-
-

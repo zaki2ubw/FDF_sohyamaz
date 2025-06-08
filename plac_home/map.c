@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 14:48:38 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:51:20 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ int	count_column(char *line, char cut)
 	int	count;
 	int	column;
 
-	column = 1;
+	column = 0;
 	count = 0;
 	if (line == NULL)
 		return (0);
-	while (line[count] != '\0')
+	while (line[count] != '\0' && line[count] != '\n')
 	{
-		if (line[count] == cut)
+		if (line[count] != cut)
 			column++;
 		count++;
 	}
