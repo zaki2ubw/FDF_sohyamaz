@@ -1,6 +1,0 @@
-[submodule "plac_home/libft_sohyamaz"]
-	path = plac_home/libft_sohyamaz
-	url = https://github.com/sohyamaz/libft_sohyamaz
-[submodule "plac_home/minilibx-linux"]
-	path = plac_home/minilibx-linux
-	url = https://github.com/42Paris/minilibx-linux
