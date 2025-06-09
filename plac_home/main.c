@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 	create_window(val);
 	projection(val);
 	draw_line(val);
+    mlx_expose_hook(val->var->win, &draw_line_wrapper, val);
     mlx_loop(val->var->mlx);
     //free_all?
 	//event_hook???

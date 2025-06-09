@@ -44,7 +44,7 @@ int	err_check_x(t_structs *val, t_calc *calc, t_isom *gl, int color)
 	calc->err = calc->delta_x / 2;
 	while (calc->x != gl->x)
 	{
-		pixel_put(val, calc->x, calc->y, color); 
+		pixel_put(val, calc->x, calc->y, color);
 		calc->x = calc->x + calc->sign_x;
 		calc->err = calc->err - calc->delta_y;
 		if (calc->err < 0)
@@ -63,7 +63,7 @@ int	err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color)
 	calc->err = calc->delta_y / 2;
 	while (calc->y != gl->y)
 	{
-		pixel_put(val, calc->x, calc->y, color); 
+		pixel_put(val, calc->x, calc->y, color);
 		calc->y = calc->y + calc->sign_y;
 		calc->err = calc->err - calc->delta_x;
 		if (calc->err < 0)
@@ -77,12 +77,12 @@ int	err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color)
 
 int	bresenham(t_structs *val, t_isom *st, t_isom *gl, int color)
 {
-	int	x;
-	int	y;
+	//int	x;
+	//int	y;
 	int	error;
 
-	x = st->x;
-	y = st->y;
+	//x = st->x;
+	//y = st->y;
 	error = set_calc(val, st, gl);
 	if (error != 0)
 		return (error);

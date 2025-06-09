@@ -61,11 +61,9 @@ int	count_map_size(t_map **map, int fd)
 
 void	check_map_size(t_structs *val, char *file, t_map **map)
 {
-	int		row;
 	int		fd;
 	int		error;
 
-	row = 0;
 	fd = 0;
 	error = 0;
 	if (val == NULL || file == NULL || *map == NULL)
@@ -146,9 +144,7 @@ void	read_map(t_structs *val, char *file, t_map **map)
 {
 	int		error;
 	int		fd;
-	int		count;
 
-	count = 0;
 	if (val == NULL || file == NULL || *map == NULL)
 		error_exit(&val, ERR_NULL_VALUE_DETECTED);
 	fd = open(file, O_RDONLY);

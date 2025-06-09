@@ -22,6 +22,7 @@ SRCS	= main.c\
 		  map.c\
 		  mem_util.c\
 		  projection.c\
+		  wrappers.c\
 		  gnl/get_next_line.c\
 		  gnl/get_next_line_utils.c
 OBJS	= $(SRCS:%.c=%.o)
@@ -58,7 +59,7 @@ $(MLX_LIB):
 %.o: %.c
 	$(CC) $(CFLAGS) -O0 -c $< -o $@
 
-clean	: 
+clean	:
 	rm -rf $(OBJS)
 	$(MAKE) -C $(LIBDIR) clean
 	-$(MAKE) -C $(MLX_DIR) clean

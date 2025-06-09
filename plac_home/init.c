@@ -55,9 +55,6 @@ int	init_maps(t_structs *val)
 
 int	init_mlx(t_structs *val)
 {
-	int	error;
-
-	error = 0;
 	val->var = ft_calloc(sizeof(t_var), 1);
 	if (val->var == NULL)
 		return (ERR_VAR_ALLOC_FAILED);

@@ -39,11 +39,11 @@
 # endif
 
 # ifndef OFFSET_X
-#  define OFFSET_X WINDOW_WIDTH / 2
+#  define OFFSET_X WINDOW_WIDTH / 4
 # endif
 
 # ifndef OFFSET_Y
-#  define OFFSET_Y WINDOW_HEIGHT / 2
+#  define OFFSET_Y WINDOW_HEIGHT / 4
 # endif
 
 # ifndef DEFAULT_ZOOM
@@ -51,7 +51,7 @@
 # endif
 
 # ifndef DEFAULT_Z_SCALE
-#  define DEFAULT_Z_SCALE 10.0
+#  define DEFAULT_Z_SCALE 0.5
 # endif
 
 # ifndef ISOM_ANGLE
@@ -79,8 +79,6 @@
 #define ERR_ISOM_ALLOC_FAILED 19
 #define ERR_INIT_ISOM_FAILED 20
 #define ERR_GET_DATA_ADDR_FAILED 21
-
-
 
 typedef struct s_structs
 {
@@ -210,8 +208,13 @@ int		init_coord(t_structs *val);
 int		init_isom(t_structs *val);
 void	set_scale(t_structs *val);
 int		set_coord(t_structs *val);
+int     isom_x(t_3d coord, double zoom);
+int     isom_y(t_3d coord, double zoom);
 int		trans_isom(t_structs *val);
 int		scale_image(t_structs *val);
 void	projection(t_structs *val);
+
+//wrappers.c
+int draw_line_wrapper(void *ptr);
 
 #endif
