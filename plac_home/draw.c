@@ -36,6 +36,17 @@ int	draw_loop(t_structs *val, int vt, int color)
 			if (error != 0)
 				return (error);
 		}
+        if  ((vt < val->map->height - 1) && (hr < val->map->width - 1))
+        {
+            error = bresenham(val, &val->isom[vt][hr], \
+                    &val->isom[vt + 1][hr + 1], color);
+			if (error != 0)
+				return (error);
+            /*error = bresenham(val, &val->isom[vt][hr + 1], \
+                    &val->isom[vt + 1][hr], color)*/
+                        //if (error != 0)
+			//	return (error);
+        }
 		hr++;
 	}
 	return (0);
