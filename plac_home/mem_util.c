@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 13:43:15 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 22:43:56 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,23 @@ void	error_exit(t_structs **val, int error)
 
 void	free_val(t_structs **val)
 {
-	if ((*val)->image != NULL)
-		free ((*val)->image);
-	if ((*val)->var != NULL)
-		free ((*val)->var);
-	if ((*val)->scale != NULL)
-		free ((*val)->scale);
-	if ((*val)->isom != NULL)
-		free ((*val)->isom);
-	if ((*val)->coord != NULL)
-		free ((*val)->coord);
+	free_elements(val, (*val)->map->height);
 	if ((*val)->map != NULL)
 		free ((*val)->map);
+	if ((*val)->coord != NULL)
+		free ((*val)->coord);
+	if ((*val)->isom != NULL)
+		free ((*val)->isom);
+	if ((*val)->scale != NULL)
+		free ((*val)->scale);
+	if ((*val)->var != NULL)
+		free ((*val)->var);
+	if ((*val)->image != NULL)
+		free ((*val)->image);
+	if ((*val)->palette != NULL)
+		free ((*val)->palette);
+	if ((*val)->calc != NULL)
+		free ((*val)->calc);
 	free (*val);
 	return ;
 }
@@ -84,12 +89,12 @@ void	free_args(char *line, char **args)
 	return ;
 }
 
-void	free_z_map(int **z_map)
+void	free_z_map(int **z_map, int height)
 {
 	int	count;
 
 	count = 0;
-	while (z_map[count] != NULL)
+	while (count < height)
 	{
 		free(z_map[count]);
 		count++;
@@ -98,14 +103,14 @@ void	free_z_map(int **z_map)
 	return ;
 }
 
-void	free_coord(t_3d **coord)
+void	free_coord(t_3d **coord, int height)
 {
 	int	count;
 
 	count = 0;
 	if (coord != NULL)
 	{
-		while (coord[count] != NULL)
+		while (count < height)
 		{
 			free(coord[count]);
 			count++;
@@ -115,19 +120,29 @@ void	free_coord(t_3d **coord)
 	return ;
 }
 
-void	free_isom(t_isom **isom)
+void	free_isom(t_isom **isom, int height)
 {
 	int	count;
 
 	count = 0;
 	if (isom != NULL)
 	{
-		while (isom[count] != NULL)
+		while (count < height)
 		{
 			free(isom[count]);
 			count++;
 		}
 		free(isom);
 	}
+	return ;
+}
+
+void	free_elements(t_structs **val, int height)
+{
+	free_z_map((*val)->map->z_map, height);
+	free_coord((*val)->coord, height);
+	free_isom((*val)->isom, height);
+	free((*val)->var->win);
+	free((*val)->var->mlx);
 	return ;
 }
