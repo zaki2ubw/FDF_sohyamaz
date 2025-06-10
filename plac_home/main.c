@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 19:17:27 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 22:26:50 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ int	main(int argc, char **argv)
 	projection(val);
 	draw_line(val);
     mlx_expose_hook(val->var->win, &draw_line_wrapper, val);
+	mlx_key_hook(val->var->win, close_window_esc, val);
+	mlx_hook(val->var->win, 17, 0, close_window_cross, val);
     mlx_loop(val->var->mlx);
-    //free_all?
-	//event_hook???
+	free_val(&val);
 	return (0);
 }

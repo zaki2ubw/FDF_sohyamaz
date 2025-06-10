@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 16:51:20 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 22:45:42 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	init_z_map(t_map **map)
 		(*map)->z_map[count] = ft_calloc(sizeof(int), (*map)->width);
 		if ((*map)->z_map[count] == NULL)
 		{
-			free_z_map((*map)->z_map);
+			free_z_map((*map)->z_map, count);
 			return (ERR_ZVALUE_ALLOC_FAILED);
 		}
 		count++;

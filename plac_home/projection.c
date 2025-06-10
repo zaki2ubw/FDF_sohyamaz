@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/10 21:36:07 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 22:46:30 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	init_coord(t_structs *val)
 	}
 	if (y < val->map->height)
 	{
-		free_coord(val->coord);
+		free_coord(val->coord, val->map->height);
 		return (ERR_INIT_COORD_FAILED);
 	}
 	return (0);
@@ -56,7 +56,7 @@ int	init_isom(t_structs *val)
 	}
 	if (y < val->map->height)
 	{
-		free_isom(val->isom);
+		free_isom(val->isom, val->map->height);
 		return (ERR_INIT_ISOM_FAILED);
 	}
 	return (0);

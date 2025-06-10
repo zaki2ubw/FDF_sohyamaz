@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 21:45:59 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 22:44:27 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,8 @@ int		draw_loop(t_structs *val, int vt, int color);
 void	draw_line(t_structs *val);
 
 //event.c
-int		close_window(int keycode, t_structs *val);
+int	close_window_esc(int keycode, t_structs *val);
+int	close_window_cross(t_structs *val);
 
 //image.c
 void	create_window(t_structs *val);
@@ -199,19 +200,23 @@ void	error_exit(t_structs **val, int error);
 void	free_val(t_structs **val);
 void	put_error(int error);
 void	free_args(char *line, char **args);
-void	free_z_map(int **z_map);
-void	free_coord(t_3d **coord);
-void	free_isom(t_isom **isom);
+void	free_z_map(int **z_map, int height);
+void	free_coord(t_3d **coord, int height);
+void	free_isom(t_isom **isom, int height);
+void	free_elements(t_structs **val, int height);
 
 //projection.c
-int		init_coord(t_structs *val);
-int		init_isom(t_structs *val);
+int	init_coord(t_structs *val);
+int	init_isom(t_structs *val);
 void	set_scale(t_structs *val);
-int		set_coord(t_structs *val);
-int     isom_x(t_3d coord, double zoom);
-int     isom_y(t_3d coord, double zoom);
-int		trans_isom(t_structs *val);
-int		scale_image(t_structs *val);
+int	set_coord(t_structs *val);
+int isom_x(t_3d coord, t_scale *scale);
+int isom_y(t_3d coord, t_scale *scale);
+int	trans_isom(t_structs *val);
+void	check_limit(int target, int *min, int *max);
+int	get_center_offset_x(t_structs *val);
+int	get_center_offset_y(t_structs *val);
+int	offset_image(t_structs *val);
 void	projection(t_structs *val);
 
 //wrappers.c
