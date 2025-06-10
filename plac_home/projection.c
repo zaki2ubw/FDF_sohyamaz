@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 21:52:34 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:36:07 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,23 +97,23 @@ int	set_coord(t_structs *val)
 	return (0);
 }
 
-int isom_x(t_3d coord, double zoom)
+int isom_x(t_3d coord, t_scale *scale)
 {
     double  temp;
     int     isom_x;
 
     temp = (coord.x - coord.y) * 0.866;
-    isom_x = (int)(temp * zoom);
+    isom_x = (int)(temp * scale->zoom);
     return (isom_x);
 }
 
-int isom_y(t_3d coord, double zoom)
+int isom_y(t_3d coord, t_scale *scale)
 {
     double  temp;
     int     isom_y;
 
-    temp = (coord.x + coord.y) * 0.5 - (coord.z * 0.5);
-    isom_y = (int)(temp * zoom);
+    temp = (coord.x + coord.y) * 0.5 - (coord.z * scale->z_scale);
+    isom_y = (int)(temp * scale->zoom);
     return (isom_y);
 }
 
@@ -131,8 +131,8 @@ int	trans_isom(t_structs *val)
 		hr = 0;
 		while (hr < val->map->width)
 		{
-            val->isom[vt][hr].x = isom_x(val->coord[vt][hr], val->scale->zoom);
-            val->isom[vt][hr].y = isom_y(val->coord[vt][hr], val->scale->zoom);
+            val->isom[vt][hr].x = isom_x(val->coord[vt][hr], val->scale);
+            val->isom[vt][hr].y = isom_y(val->coord[vt][hr], val->scale);
             hr++;
 		}
 		vt++;
@@ -140,26 +140,87 @@ int	trans_isom(t_structs *val)
 	return (0);
 }
 
-int	scale_image(t_structs *val)
+void	check_limit(int target, int *min, int *max)
+{
+	if (target < *min)
+		*min = target;
+	if (target > *max)
+		*max = target;
+	return ;
+}
+
+int	get_center_offset_x(t_structs *val)
 {
 	int	vt;
 	int	hr;
+	int	min;
+	int	max;
 
-	vt = 0;
 	if (val == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
-	set_scale(val);
+	vt = 0;
+	max = INT_MIN;
+	min = INT_MAX;
 	while (vt < val->map->height)
 	{
 		hr = 0;
 		while (hr < val->map->width)
 		{
-			val->isom[vt][hr].x =\
-			val->isom[vt][hr].x * val->scale->zoom + val->scale->offset_x;
-			val->isom[vt][hr].y =\
-			val->isom[vt][hr].y * val->scale->zoom + val->scale->offset_y;
-			printf("isom[%d][%d] = (%d, %d)\n", vt, hr,\
-			val->isom[vt][hr].x, val->isom[vt][hr].y);
+			check_limit(val->isom[vt][hr].x, &min, &max);
+			hr++;
+		}
+		vt++;
+	}
+	val->scale->offset_x = (WINDOW_WIDTH / 2) - ((max + min) / 2);
+	return (0);
+}
+
+int	get_center_offset_y(t_structs *val)
+{
+	int	vt;
+	int	hr;
+	int	min;
+	int	max;
+
+	if (val == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	vt = 0;
+	max = INT_MIN;
+	min = INT_MAX;
+	while (vt < val->map->height)
+	{
+		hr = 0;
+		while (hr < val->map->width)
+		{
+			check_limit(val->isom[vt][hr].y, &min, &max);
+			hr++;
+		}
+		vt++;
+	}
+	val->scale->offset_y = (WINDOW_HEIGHT / 2) - ((max + min) / 2);
+	return (0);
+}
+
+int	offset_image(t_structs *val)
+{
+	int	vt;
+	int	hr;
+	int error;
+
+	vt = 0;
+	error = get_center_offset_x(val);
+	if (error != 0)
+		return (error);
+	error = get_center_offset_y(val);
+	if (error != 0)
+		return (error);
+	while (vt < val->map->height)
+	{
+		hr = 0;
+		while (hr < val->map->width)
+		{
+			val->isom[vt][hr].x = val->isom[vt][hr].x + val->scale->offset_x;
+			val->isom[vt][hr].y = val->isom[vt][hr].y + val->scale->offset_y;
 			hr++;
 		}
 		vt++;
@@ -184,8 +245,8 @@ void	projection(t_structs *val)
 	error = trans_isom(val);
 	if (error != 0)
 		error_exit(&val, error);
-	//error = scale_image(val);
-	//if (error != 0)
-	//	error_exit(&val, error);
+	error = offset_image(val);
+	if (error != 0)
+		error_exit(&val, error);
 	return ;
 }
