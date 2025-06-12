@@ -34,7 +34,9 @@ int	count_map_size(t_map **map, int fd)
 {
 	char	*line;
 	int		row;
+    int     temp;
 
+    temp = 1;
 	row = 0;
 	if (*map == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
@@ -43,15 +45,17 @@ int	count_map_size(t_map **map, int fd)
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-		if (row == 0)
+	//	if (row == 0)
+	//	{
+		temp = count_column(line, ' ');
+        if (temp >= (*map)->width)
+			(*map)->width = temp;
+		if ((*map)->width == 0)
 		{
-			(*map)->width = count_column(line, ' ');
-			if ((*map)->width == 0)
-			{
-				free(line);
-				return (ERR_GNL_FAILED);
-			}
+			free(line);
+			return (ERR_GNL_FAILED);
 		}
+	//  }
 		free(line);
 		row++;
 	}

@@ -17,12 +17,7 @@ int	close_window_esc(int keycode, t_structs *val)
 	if (val == NULL)
 		exit (ERR_NULL_VALUE_DETECTED);
 	if (keycode == KEY_ESC)
-	{
-		mlx_destroy_image(val->var->mlx, val->image->img);
-		mlx_destroy_window(val->var->mlx, val->var->win);
-		mlx_destroy_display(val->var->mlx);
-		return (0);
-	}
+        mlx_loop_end(val->var->mlx);
 	return (0);
 }
 
@@ -30,8 +25,6 @@ int	close_window_cross(t_structs *val)
 {
 	if (val == NULL)
 		exit (ERR_NULL_VALUE_DETECTED);
-	mlx_destroy_image(val->var->mlx, val->image->img);
-	mlx_destroy_window(val->var->mlx, val->var->win);
-	mlx_destroy_display(val->var->mlx);
-	exit (0);
+    mlx_loop_end(val->var->mlx);
+	return (0);
 }

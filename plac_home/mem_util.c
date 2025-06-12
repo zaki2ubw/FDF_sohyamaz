@@ -27,23 +27,16 @@ void	error_exit(t_structs **val, int error)
 
 void	free_val(t_structs **val)
 {
+    free_mlx_elements(*val);
 	free_elements(val, (*val)->map->height);
-	if ((*val)->map != NULL)
-		free ((*val)->map);
-	if ((*val)->coord != NULL)
-		free ((*val)->coord);
-	if ((*val)->isom != NULL)
-		free ((*val)->isom);
-	if ((*val)->scale != NULL)
-		free ((*val)->scale);
-	if ((*val)->var != NULL)
-		free ((*val)->var);
-	if ((*val)->image != NULL)
-		free ((*val)->image);
-	if ((*val)->palette != NULL)
-		free ((*val)->palette);
-	if ((*val)->calc != NULL)
-		free ((*val)->calc);
+	free ((*val)->map);
+//	free ((*val)->coord);
+//	free ((*val)->isom);
+	free ((*val)->scale);
+	free ((*val)->var);
+	free ((*val)->image);
+	free ((*val)->palette);
+	free ((*val)->calc);
 	free (*val);
 	return ;
 }
@@ -82,10 +75,8 @@ void	free_args(char *line, char **args)
 		free(args[i]);
 		i++;
 	}
-	if (line != NULL)
-		free (line);
-	if (args != NULL)
-		free (args);
+	free (line);
+	free (args);
 	return ;
 }
 
@@ -108,15 +99,12 @@ void	free_coord(t_3d **coord, int height)
 	int	count;
 
 	count = 0;
-	if (coord != NULL)
+	while (count < height)
 	{
-		while (count < height)
-		{
-			free(coord[count]);
-			count++;
-		}
-		free(coord);
+		free(coord[count]);
+		count++;
 	}
+	free(coord);
 	return ;
 }
 
@@ -125,15 +113,12 @@ void	free_isom(t_isom **isom, int height)
 	int	count;
 
 	count = 0;
-	if (isom != NULL)
+	while (count < height)
 	{
-		while (count < height)
-		{
-			free(isom[count]);
-			count++;
-		}
-		free(isom);
+		free(isom[count]);
+		count++;
 	}
+	free(isom);
 	return ;
 }
 
@@ -142,7 +127,15 @@ void	free_elements(t_structs **val, int height)
 	free_z_map((*val)->map->z_map, height);
 	free_coord((*val)->coord, height);
 	free_isom((*val)->isom, height);
-	free((*val)->var->win);
+//	free((*val)->var->win);
 	free((*val)->var->mlx);
 	return ;
+}
+
+void    free_mlx_elements(t_structs *val)
+{
+	mlx_destroy_image(val->var->mlx, val->image->img);
+	mlx_destroy_window(val->var->mlx, val->var->win);
+	mlx_destroy_display(val->var->mlx);
+    return ;
 }

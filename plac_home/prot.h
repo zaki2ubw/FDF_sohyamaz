@@ -204,6 +204,7 @@ void	free_z_map(int **z_map, int height);
 void	free_coord(t_3d **coord, int height);
 void	free_isom(t_isom **isom, int height);
 void	free_elements(t_structs **val, int height);
+void    free_mlx_elements(t_structs *val);
 
 //projection.c
 int	init_coord(t_structs *val);
