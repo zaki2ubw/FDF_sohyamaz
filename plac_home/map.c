@@ -30,13 +30,36 @@ int	count_column(char *line, char cut)
 	return (column);
 }
 
-int	count_map_size(t_map **map, int fd)
+int	set_width(t_map **map, int fd)
+{
+	char	*line;
+	int		count;
+	int		column;
+
+	column = 0;
+	count = 0;
+	if (*map == NULL)
+		return (ERR_NULL_VALUE_DETECTED);
+	map->width = ft_calloc(sizeof(int), map->width);
+	if (map->width == NULL)
+		return (ERR_ALLOC_FAILED);
+	while (count < map->height)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
+		map->width[count] = count_column(line, ' ');
+		free(line);
+		count++;
+	}
+	return (0);
+}
+
+int	set_row(t_map **map, int fd)
 {
 	char	*line;
 	int		row;
-    int     temp;
 
-    temp = 1;
 	row = 0;
 	if (*map == NULL)
 		return (ERR_NULL_VALUE_DETECTED);
@@ -45,17 +68,6 @@ int	count_map_size(t_map **map, int fd)
 		line = get_next_line(fd);
 		if (line == NULL)
 			break ;
-	//	if (row == 0)
-	//	{
-		temp = count_column(line, ' ');
-        if (temp >= (*map)->width)
-			(*map)->width = temp;
-		if ((*map)->width == 0)
-		{
-			free(line);
-			return (ERR_GNL_FAILED);
-		}
-	//  }
 		free(line);
 		row++;
 	}
@@ -73,13 +85,15 @@ void	check_map_size(t_structs *val, char *file, t_map **map)
 	if (val == NULL || file == NULL || *map == NULL)
 		error_exit(&val, ERR_NULL_VALUE_DETECTED);
 	fd = open(file, O_RDONLY);
-	error = count_map_size(map, fd);
-	if (error != 0)
-	{
-		close(fd);
-		error_exit(&val, error);
-	}
+	error = set_height(map, fd);
 	close(fd);
+	if (error != 0)
+		error_exit(&val, error);
+	fd = open(file, O_RDONLY);
+	error = set_width(map, fd);
+	close(fd);
+	if (error != 0)
+		error_exit(&val, error);
 	return ;
 }
 

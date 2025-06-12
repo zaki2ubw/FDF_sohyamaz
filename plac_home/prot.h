@@ -94,9 +94,9 @@ typedef struct s_structs
 
 typedef struct s_map
 {
-    int **z_map;
-    int width;
     int height;
+    int *width;
+    int **z_map;
 } t_map;
 
 typedef struct s_3d
@@ -188,7 +188,8 @@ int		init_color(t_structs *val);
 
 //map.c
 int		count_column(char *line, char cut);
-int		count_map_size(t_map **map, int fd);
+int		set_width(t_map **map, int fd);
+int		set_height(t_map **map, int fd);
 void	check_map_size(t_structs *val, char *file, t_map **map);
 int		convert_map(t_map **map, char **args, int count);
 int		set_map(t_map **map, int fd);
