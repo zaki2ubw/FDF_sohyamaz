@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:16 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/10 22:43:56 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:15:52 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,19 @@ void	error_exit(t_structs **val, int error)
 		*val = NULL;
 		exit(error);
 	}
+}
+
+void	file_check(char **argv)
+{
+	char	*temp;
+	size_t	len;
+
+	if (argv == NULL)
+		exit(ERR_NULL_VALUE_DETECTED);
+	len = ft_strlen(argv[1]);
+	temp = ft_strnstr(argv[1], ".fdf", len);
+	if (temp == NULL)
+		exit(ERR_INVALID_FILEEXT);
 }
 
 void	free_val(t_structs **val)
