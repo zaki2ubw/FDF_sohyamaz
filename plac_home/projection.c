@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/10 22:46:30 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/15 21:36:15 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,9 @@ void	set_scale(t_structs *val)
 {
 	if (val == NULL)
 		exit(ERR_NULL_VALUE_DETECTED);
-	val->scale->zoom = DEFAULT_ZOOM;
+	if (val->scale->zoom <= 0)
+		val->scale->zoom = DEFAULT_ZOOM;
 	val->scale->z_scale = DEFAULT_Z_SCALE;
-	val->scale->offset_x = OFFSET_X;
-	val->scale->offset_y = OFFSET_Y;
 	return ;
 }
 
@@ -208,12 +207,13 @@ int	offset_image(t_structs *val)
 	int error;
 
 	vt = 0;
-	error = get_center_offset_x(val);
-	if (error != 0)
-		return (error);
-	error = get_center_offset_y(val);
-	if (error != 0)
-		return (error);
+	if (val->scale->offset_x == 0 && val->scale->offset_y == 0)
+	{
+		error = get_center_offset_x(val);
+		error = get_center_offset_y(val);
+		if (error != 0)
+			return (error);
+	}
 	while (vt < val->map->height)
 	{
 		hr = 0;
