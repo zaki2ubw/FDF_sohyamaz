@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/10 22:44:27 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:17:30 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@
 #define ERR_ISOM_ALLOC_FAILED 19
 #define ERR_INIT_ISOM_FAILED 20
 #define ERR_GET_DATA_ADDR_FAILED 21
+#define ERR_ALLOC_FAILED 22
+#define ERR_EMPTY_MAP 23
+#define ERR_INVALID_FILEEXT 24
 
 typedef struct s_structs
 {
@@ -95,7 +98,7 @@ typedef struct s_structs
 typedef struct s_map
 {
     int height;
-    int *width;
+    int width;
     int **z_map;
 } t_map;
 
@@ -169,8 +172,9 @@ int		draw_loop(t_structs *val, int vt, int color);
 void	draw_line(t_structs *val);
 
 //event.c
-int	close_window_esc(int keycode, t_structs *val);
 int	close_window_cross(t_structs *val);
+void	apply_offset(int keycode, t_structs *val);
+int	key_event(int keycode, t_structs *val);
 
 //image.c
 void	create_window(t_structs *val);
@@ -188,7 +192,6 @@ int		init_color(t_structs *val);
 
 //map.c
 int		count_column(char *line, char cut);
-int		set_width(t_map **map, int fd);
 int		set_height(t_map **map, int fd);
 void	check_map_size(t_structs *val, char *file, t_map **map);
 int		convert_map(t_map **map, char **args, int count);
@@ -197,6 +200,7 @@ int		init_z_map(t_map **map);
 void	read_map(t_structs *val, char *file, t_map **map);
 
 //mem_util.c
+void	file_check(char **argv);
 void	error_exit(t_structs **val, int error);
 void	free_val(t_structs **val);
 void	put_error(int error);

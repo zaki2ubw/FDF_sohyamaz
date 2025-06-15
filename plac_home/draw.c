@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:52 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/08 17:47:18 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/15 20:55:49 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	draw_line(t_structs *val)
 	if (val == NULL || val->map == NULL)
 		error_exit(&val, ERR_NULL_VALUE_DETECTED);
 	printf("drawing...\n");
+	if (val->image->img != NULL)
+		mlx_destroy_image(val->var->mlx, val->image->img);
+	val->image->img = mlx_new_image(val->var->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	val->image->addr = mlx_get_data_addr(val->image->img, \
+	&val->image->bits_per_pixel, &val->image->line_length, &val->image->endian); 
 	while (vt < val->map->height)
 	{
 		error = draw_loop(val, vt, color);
@@ -71,6 +76,7 @@ void	draw_line(t_structs *val)
 			error_exit(&val, error);
 		vt++;
 	}
+	mlx_clear_window(val->var->mlx, val->var->win);
 	mlx_put_image_to_window(val->var->mlx, val->var->win, val->image->img, 0, 0);
 	return ;
 }

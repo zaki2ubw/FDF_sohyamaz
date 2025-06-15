@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:44:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/15 19:15:29 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/15 22:05:40 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ int	set_height(t_map **map, int fd)
 	while (1)
 	{
 		line = get_next_line(fd);
-		if (line == NULL)
+		if (line == NULL && row == 0)
+			return (ERR_EMPTY_MAP);
+		else if (line == NULL)
 			break ;
 		column = count_column(line, ' ');
 		if ((*map)->width < column)
@@ -119,14 +121,14 @@ int	init_z_map(t_map **map)
 	count = 0;
 	(*map)->z_map = ft_calloc(sizeof(int *), (*map)->height);
 	if ((*map)->z_map == NULL)
-		return (ERR_ZMAP_ALLOC_FAILED);
+		return (ERR_ALLOC_FAILED);
 	while (count < (*map)->height)
 	{
 		(*map)->z_map[count] = ft_calloc(sizeof(int), (*map)->width);
 		if ((*map)->z_map[count] == NULL)
 		{
 			free_z_map((*map)->z_map, count);
-			return (ERR_ZVALUE_ALLOC_FAILED);
+			return (ERR_ALLOC_FAILED);
 		}
 		count++;
 	}
