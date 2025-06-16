@@ -22,3 +22,26 @@ int	draw_line_wrapper(void *ptr)
 	draw_line(val);
 	return (0);
 }
+
+void	init_structs(t_structs **val)
+{
+	int	error;
+
+	error = 0;
+	error = init_val(&(*val));
+	if (error != 0)
+		error_exit(val, error);
+	error = init_maps(*val);
+	if (error != 0)
+		error_exit(val, error);
+	error = init_modules(*val);
+	if (error != 0)
+		error_exit(val, error);
+	error = init_color(*val);
+	if (error != 0)
+		error_exit(val, error);
+	error = init_mlx(*val);
+	if (error != 0)
+		error_exit(val, error);
+	return ;
+}

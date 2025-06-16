@@ -172,9 +172,22 @@ int		draw_loop(t_structs *val, int vt, int color);
 void	draw_line(t_structs *val);
 
 //event.c
-int	close_window_cross(t_structs *val);
+int		close_window_cross(t_structs *val);
 void	apply_offset(int keycode, t_structs *val);
-int	key_event(int keycode, t_structs *val);
+int		key_event(int keycode, t_structs *val);
+
+//exit.c
+void	error_exit(t_structs **val, int error);
+void	free_val(t_structs **val);
+void	put_error(int error);
+void	free_elements(t_structs **val, int height);
+void    free_mlx_elements(t_structs *val);
+
+//files.c
+void	file_check(char **argv);
+int		count_column(char *line, char cut);
+int		set_height(t_map **map, int fd);
+void	check_map_size(t_structs *val, char *file, t_map **map);
 
 //image.c
 void	create_window(t_structs *val);
@@ -183,49 +196,44 @@ int		set_image(t_var *var, t_image *image);
 void	pixel_put(t_structs *val, int x, int y, int color);
 
 //init.c
-void	init_structs(t_structs **val);
 int		init_val(t_structs **val);
 int		init_maps(t_structs *val);
 int		init_mlx(t_structs *val);
 int		init_modules(t_structs *val);
 int		init_color(t_structs *val);
 
+//isometric.c
+int		init_isom(t_structs *val);
+int		isom_x(t_3d coord, t_scale *scale);
+int		isom_y(t_3d coord, t_scale *scale);
+int		trans_isom(t_structs *val);
+
 //map.c
-int		count_column(char *line, char cut);
-int		set_height(t_map **map, int fd);
-void	check_map_size(t_structs *val, char *file, t_map **map);
 int		convert_map(t_map **map, char **args, int count);
 int		set_map(t_map **map, int fd);
 int		init_z_map(t_map **map);
 void	read_map(t_structs *val, char *file, t_map **map);
 
 //mem_util.c
-void	file_check(char **argv);
-void	error_exit(t_structs **val, int error);
-void	free_val(t_structs **val);
-void	put_error(int error);
 void	free_args(char *line, char **args);
 void	free_z_map(int **z_map, int height);
 void	free_coord(t_3d **coord, int height);
 void	free_isom(t_isom **isom, int height);
-void	free_elements(t_structs **val, int height);
-void    free_mlx_elements(t_structs *val);
 
 //projection.c
-int	init_coord(t_structs *val);
-int	init_isom(t_structs *val);
-void	set_scale(t_structs *val);
-int	set_coord(t_structs *val);
-int isom_x(t_3d coord, t_scale *scale);
-int isom_y(t_3d coord, t_scale *scale);
-int	trans_isom(t_structs *val);
-void	check_limit(int target, int *min, int *max);
-int	get_center_offset_x(t_structs *val);
-int	get_center_offset_y(t_structs *val);
-int	offset_image(t_structs *val);
+int		init_coord(t_structs *val);
+int		set_coord(t_structs *val);
 void	projection(t_structs *val);
 
+//scale.c
+void	set_scale(t_structs *val);
+void	check_limit(int target, int *min, int *max);
+int		get_center_offset_x(t_structs *val);
+int		get_center_offset_y(t_structs *val);
+int		offset_image(t_structs *val);
+
 //wrappers.c
-int draw_line_wrapper(void *ptr);
+int 	draw_line_wrapper(void *ptr);
+void	init_structs(t_structs **val);
 
 #endif
