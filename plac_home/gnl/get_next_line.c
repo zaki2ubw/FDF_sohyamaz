@@ -43,7 +43,7 @@ int	get_next_char(int fd)
 char	*set_next_line(int asc, char *val)
 {
 	if (asc == EOF)
-	{	
+	{
 		if (*val == '\0')
 		{
 			free (val);

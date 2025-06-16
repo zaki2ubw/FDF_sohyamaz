@@ -13,10 +13,10 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include	<stdlib.h>
-# include	<limits.h>
-# include	<stdint.h>
-# include	<unistd.h>
+# include <stdlib.h>
+# include <limits.h>
+# include <stdint.h>
+# include <unistd.h>
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int n);

@@ -23,30 +23,16 @@ int	draw_loop(t_structs *val, int vt, int color)
 	while (hr < val->map->width)
 	{
 		if (hr < val->map->width - 1)
-		{
 			error = bresenham(val, &val->isom[vt][hr], \
-					&val->isom[vt][hr + 1], color);
-			if (error != 0)
-				return (error);
-		}
+&val->isom[vt][hr + 1], color);
 		if (vt < val->map->height - 1)
-		{
 			error = bresenham(val, &val->isom[vt][hr], \
-					&val->isom[vt + 1][hr], color);
-			if (error != 0)
-				return (error);
-		}
-        if  ((vt < val->map->height - 1) && (hr < val->map->width - 1))
-        {
-            error = bresenham(val, &val->isom[vt][hr], \
-                    &val->isom[vt + 1][hr + 1], color);
-			if (error != 0)
-				return (error);
-            /*error = bresenham(val, &val->isom[vt][hr + 1], \
-                    &val->isom[vt + 1][hr], color)*/
-                        //if (error != 0)
-			//	return (error);
-        }
+&val->isom[vt + 1][hr], color);
+		if ((vt < val->map->height - 1) && (hr < val->map->width - 1))
+			error = bresenham(val, &val->isom[vt][hr], \
+&val->isom[vt + 1][hr + 1], color);
+		if (error != 0)
+			return (error);
 		hr++;
 	}
 	return (0);
@@ -68,7 +54,7 @@ void	draw_line(t_structs *val)
 		mlx_destroy_image(val->var->mlx, val->image->img);
 	val->image->img = mlx_new_image(val->var->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	val->image->addr = mlx_get_data_addr(val->image->img, \
-	&val->image->bits_per_pixel, &val->image->line_length, &val->image->endian); 
+&val->image->bits_per_pixel, &val->image->line_length, &val->image->endian);
 	while (vt < val->map->height)
 	{
 		error = draw_loop(val, vt, color);
@@ -77,6 +63,7 @@ void	draw_line(t_structs *val)
 		vt++;
 	}
 	mlx_clear_window(val->var->mlx, val->var->win);
-	mlx_put_image_to_window(val->var->mlx, val->var->win, val->image->img, 0, 0);
+	mlx_put_image_to_window(val->var->mlx, \
+val->var->win, val->image->img, 0, 0);
 	return ;
 }

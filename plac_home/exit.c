@@ -15,11 +15,9 @@ void	error_exit(t_structs **val, int error)
 
 void	free_val(t_structs **val)
 {
-    free_mlx_elements(*val);
+	free_mlx_elements(*val);
 	free_elements(val, (*val)->map->height);
 	free ((*val)->map);
-//	free ((*val)->coord);
-//	free ((*val)->isom);
 	free ((*val)->scale);
 	free ((*val)->var);
 	free ((*val)->image);
@@ -58,15 +56,14 @@ void	free_elements(t_structs **val, int height)
 	free_z_map((*val)->map->z_map, height);
 	free_coord((*val)->coord, height);
 	free_isom((*val)->isom, height);
-//	free((*val)->var->win);
 	free((*val)->var->mlx);
 	return ;
 }
 
-void    free_mlx_elements(t_structs *val)
+void	free_mlx_elements(t_structs *val)
 {
 	mlx_destroy_image(val->var->mlx, val->image->img);
 	mlx_destroy_window(val->var->mlx, val->var->win);
 	mlx_destroy_display(val->var->mlx);
-    return ;
+	return ;
 }

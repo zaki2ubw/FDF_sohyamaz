@@ -77,12 +77,8 @@ int	err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color)
 
 int	bresenham(t_structs *val, t_isom *st, t_isom *gl, int color)
 {
-	//int	x;
-	//int	y;
 	int	error;
 
-	//x = st->x;
-	//y = st->y;
 	error = set_calc(val, st, gl);
 	if (error != 0)
 		return (error);

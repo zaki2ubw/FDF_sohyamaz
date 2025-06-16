@@ -17,11 +17,15 @@ SRCS	= main.c\
 		  color.c\
 		  draw.c\
 		  event.c\
+		  exit.c\
+		  files.c\
 		  image.c\
 		  init.c\
+		  isometric.c\
 		  map.c\
 		  mem_util.c\
 		  projection.c\
+		  scale.c\
 		  wrappers.c\
 		  gnl/get_next_line.c\
 		  gnl/get_next_line_utils.c

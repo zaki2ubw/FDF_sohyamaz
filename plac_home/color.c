@@ -21,8 +21,7 @@ int	color_init(t_color *palette)
 	palette->red = (palette->red) % 256;
 	palette->green = (palette->green) % 256;
 	palette->blue = (palette->blue) % 256;
-	color = (palette->clear << 24) | (palette->red << 16)\
-	| (palette->green << 8) | palette->blue;
+	color = (palette->clear << 24) | \
+(palette->red << 16) | (palette->green << 8) | palette->blue;
 	return (color);
 }
-

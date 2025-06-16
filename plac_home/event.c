@@ -16,7 +16,7 @@ int	close_window_cross(t_structs *val)
 {
 	if (val == NULL)
 		exit (ERR_NULL_VALUE_DETECTED);
-    mlx_loop_end(val->var->mlx);
+	mlx_loop_end(val->var->mlx);
 	return (0);
 }
 
@@ -39,7 +39,7 @@ int	key_event(int keycode, t_structs *val)
 		exit (ERR_NULL_VALUE_DETECTED);
 	if (keycode == KEY_ESC)
 	{
-        mlx_loop_end(val->var->mlx);
+		mlx_loop_end(val->var->mlx);
 		return (0);
 	}
 	else if (keycode == 105 || keycode == 61)
@@ -50,7 +50,8 @@ int	key_event(int keycode, t_structs *val)
 		if (val->scale->zoom < 1)
 			val->scale->zoom = 1;
 	}
-	else if (keycode == 97 || keycode == 100 || keycode == 115 || keycode == 119)
+	else if (keycode == 97 || keycode == 100 \
+|| keycode == 115 || keycode == 119)
 		apply_offset(keycode, val);
 	else
 		return (0);
@@ -58,6 +59,5 @@ int	key_event(int keycode, t_structs *val)
 	free_isom(val->isom, val->map->height);
 	projection(val);
 	draw_line(val);
-	printf("Zoom: %f\n", val->scale->zoom); 
 	return (0);
 }
