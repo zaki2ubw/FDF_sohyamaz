@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:48:30 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/07 15:49:01 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/17 10:45:40 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ int	color_init(t_color *palette)
 	palette->green = (palette->green) % 256;
 	palette->blue = (palette->blue) % 256;
 	color = (palette->clear << 24) | \
-(palette->red << 16) | (palette->green << 8) | palette->blue;
+	(palette->red << 16) | (palette->green << 8) | palette->blue;
 	return (color);
 }

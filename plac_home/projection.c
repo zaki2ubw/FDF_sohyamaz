@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:46:36 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/15 21:36:15 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:24:14 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	init_coord(t_structs *val)
 		return (ERR_NULL_VALUE_DETECTED);
 	val->coord = ft_calloc(sizeof(t_3d *), val->map->height);
 	if (val->coord == NULL)
-		return (ERR_COORD_ALLOC_FAILED);
+		return (ERR_ALLOC_FAILED);
 	while (y < val->map->height)
 	{
 		val->coord[y] = ft_calloc(sizeof(t_3d), val->map->width);

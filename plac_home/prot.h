@@ -6,28 +6,24 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 11:02:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/15 22:17:30 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:40:21 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PROT_H
 # define PROT_H
 
-#include "get_next_line.h"
-#include "libft.h"
-#include "mlx.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stddef.h>
-#include <math.h>
-#include <fcntl.h>
+# include "get_next_line.h"
+# include "libft.h"
+# include "mlx.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <stddef.h>
+# include <math.h>
+# include <fcntl.h>
 
 # ifndef KEY_ESC
 #  define KEY_ESC 65307
-# endif
-
-# ifndef M_PI
-#  define M_PI 3.14159265358979323846
 # endif
 
 # ifndef WINDOW_WIDTH
@@ -38,14 +34,6 @@
 #  define WINDOW_HEIGHT 1080
 # endif
 
-# ifndef OFFSET_X
-#  define OFFSET_X WINDOW_WIDTH / 4
-# endif
-
-# ifndef OFFSET_Y
-#  define OFFSET_Y WINDOW_HEIGHT / 4
-# endif
-
 # ifndef DEFAULT_ZOOM
 #  define DEFAULT_ZOOM 30
 # endif
@@ -54,108 +42,89 @@
 #  define DEFAULT_Z_SCALE 0.5
 # endif
 
-# ifndef ISOM_ANGLE
-#  define ISOM_ANGLE M_PI / 6
-# endif
-
-#define ERR_NULL_VALUE_DETECTED 1
-#define ERR_VAL_ALLOC_FAILED 2
-#define ERR_VAR_ALLOC_FAILED 3
-#define ERR_IMAGE_ALLOC_FAILED 4
-#define ERR_MAP_ALLOC_FAILED 5
-#define ERR_SCALE_ALLOC_FAILED 6
-#define ERR_CALC_ALLOC_FAILED 7
-#define ERR_COLOR_ALLOC_FAILED 8
-#define ERR_MLX_INIT_FAILED 9
-#define ERR_MLX_NEW_WINDOW_FAILED 10
-#define ERR_MLX_NEW_IMAGE_FAILED 11
-#define ERR_MLX_GET_DATA_ADDR_FAILED 12
-#define ERR_ZMAP_ALLOC_FAILED 13
-#define ERR_ZVALUE_ALLOC_FAILED 14
-#define ERR_SPLIT_FAILED 15
-#define ERR_GNL_FAILED 16
-#define ERR_COORD_ALLOC_FAILED 17
-#define ERR_INIT_COORD_FAILED 18
-#define ERR_ISOM_ALLOC_FAILED 19
-#define ERR_INIT_ISOM_FAILED 20
-#define ERR_GET_DATA_ADDR_FAILED 21
-#define ERR_ALLOC_FAILED 22
-#define ERR_EMPTY_MAP 23
-#define ERR_INVALID_FILEEXT 24
+# define ERR_NULL_VALUE_DETECTED 1
+# define ERR_MLX_FUNC_FAILED 2
+# define ERR_SPLIT_FAILED 3
+# define ERR_GNL_FAILED 4
+# define ERR_INIT_COORD_FAILED 5
+# define ERR_INIT_ISOM_FAILED 6
+# define ERR_ALLOC_FAILED 7
+# define ERR_EMPTY_MAP 8
+# define ERR_INVALID_FILEEXT 9
 
 typedef struct s_structs
 {
-	struct s_map *map;
-	struct s_3d	**coord;
-	struct s_isom **isom;
-	struct s_scale *scale;
-	struct s_var *var;
-	struct s_image *image;
-	struct s_color *palette;
-	struct s_calc *calc;
-} t_structs;
+	struct s_map	*map;
+	struct s_3d		**coord;
+	struct s_isom	**isom;
+	struct s_scale	*scale;
+	struct s_var	*var;
+	struct s_image	*image;
+	//struct s_color	*palette;
+	struct s_calc	*calc;
+}	t_structs;
 
 typedef struct s_map
 {
-    int height;
-    int width;
-    int **z_map;
-} t_map;
+	int	height;
+	int	width;
+	int	**z_map;
+}	t_map;
 
 typedef struct s_3d
 {
-    int x;
-    int y;
-    int z;
-} t_3d;
+	int	x;
+	int	y;
+	int	z;
+}	t_3d;
 
 typedef struct s_isom
 {
-    int x;
-    int y;
-} t_isom;
+	int	x;
+	int	y;
+}	t_isom;
 
 typedef struct s_scale
 {
-    double zoom;
-    double z_scale;
-    int offset_x;
-    int offset_y;
-} t_scale;
+	double	zoom;
+	double	z_scale;
+	int		offset_x;
+	int		offset_y;
+}	t_scale;
 
 typedef struct s_var
 {
-    void    *mlx;
-    void    *win;
-} t_var;
+	void	*mlx;
+	void	*win;
+}	t_var;
 
 typedef struct s_image
 {
-    void    *img;
-    char    *addr;
-    int bits_per_pixel;
-    int line_length;
-    int endian;
-} t_image;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}	t_image;
 
-typedef struct s_color
-{
-	int	clear;
-	int	red;
-	int	green;
-	int blue;
-}	t_color;
+//typedef struct s_color
+//{
+//	int	clear;
+//	int	red;
+//	int	green;
+//	int	blue;
+//}	t_color;
 
 typedef struct s_calc
 {
-	int x;
+	int	x;
 	int	y;
 	int	delta_x;
 	int	delta_y;
 	int	sign_x;
 	int	sign_y;
 	int	err;
-} t_calc;
+}	t_calc;
 
 //bresenham.c
 int		set_sign(int start, int goal);
@@ -165,7 +134,7 @@ int		err_check_y(t_structs *val, t_calc *calc, t_isom *gl, int color);
 int		bresenham(t_structs *val, t_isom *st, t_isom *gl, int color);
 
 //color.c
-int		color_init(t_color *palette);
+//int		color_init(t_color *palette);
 
 //draw.c
 int		draw_loop(t_structs *val, int vt, int color);
@@ -181,7 +150,7 @@ void	error_exit(t_structs **val, int error);
 void	free_val(t_structs **val);
 void	put_error(int error);
 void	free_elements(t_structs **val, int height);
-void    free_mlx_elements(t_structs *val);
+void	free_mlx_elements(t_structs *val);
 
 //files.c
 void	file_check(char **argv);
@@ -233,7 +202,8 @@ int		get_center_offset_y(t_structs *val);
 int		offset_image(t_structs *val);
 
 //wrappers.c
-int 	draw_line_wrapper(void *ptr);
+int		rewrite_wrapper(t_structs *val);
+int		draw_line_wrapper(void *ptr);
 void	init_structs(t_structs **val);
 
 #endif

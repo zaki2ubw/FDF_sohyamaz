@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sohyamaz <marvin@42->fr>                    +#+  +:+       +#+        */
+/*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/17 11:57:49 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/15 22:16:37 by sohyamaz         ###   ########.fr       */
+/*   Created: 2025/06/17 11:05:06 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/17 11:05:38 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int	main(int argc, char **argv)
 	create_window(val);
 	projection(val);
 	draw_line(val);
-    mlx_expose_hook(val->var->win, &draw_line_wrapper, val);
+	mlx_expose_hook(val->var->win, &draw_line_wrapper, val);
 	mlx_key_hook(val->var->win, key_event, val);
 	mlx_hook(val->var->win, 17, 0, close_window_cross, val);
-    mlx_loop(val->var->mlx);
+	mlx_loop(val->var->mlx);
 	free_val(&val);
 	return (0);
 }

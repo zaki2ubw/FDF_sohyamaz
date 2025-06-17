@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   isometric.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/17 10:37:16 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/17 11:22:57 by sohyamaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "prot.h"
 
 int	init_isom(t_structs *val)
@@ -9,7 +21,7 @@ int	init_isom(t_structs *val)
 		return (ERR_NULL_VALUE_DETECTED);
 	val->isom = ft_calloc(sizeof(t_isom *), val->map->height);
 	if (val->isom == NULL)
-		return (ERR_ISOM_ALLOC_FAILED);
+		return (ERR_ALLOC_FAILED);
 	while (y < val->map->height)
 	{
 		val->isom[y] = ft_calloc(sizeof(t_isom), val->map->width);
@@ -25,24 +37,24 @@ int	init_isom(t_structs *val)
 	return (0);
 }
 
-int isom_x(t_3d coord, t_scale *scale)
+int	isom_x(t_3d coord, t_scale *scale)
 {
-    double  temp;
-    int     isom_x;
+	double	temp;
+	int		isom_x;
 
-    temp = (coord.x - coord.y) * 0.866;
-    isom_x = (int)(temp * scale->zoom);
-    return (isom_x);
+	temp = (coord.x - coord.y) * 0.866;
+	isom_x = (int)(temp * scale->zoom);
+	return (isom_x);
 }
 
-int isom_y(t_3d coord, t_scale *scale)
+int	isom_y(t_3d coord, t_scale *scale)
 {
-    double  temp;
-    int     isom_y;
+	double	temp;
+	int		isom_y;
 
-    temp = (coord.x + coord.y) * 0.5 - (coord.z * scale->z_scale);
-    isom_y = (int)(temp * scale->zoom);
-    return (isom_y);
+	temp = (coord.x + coord.y) * 0.5 - (coord.z * scale->z_scale);
+	isom_y = (int)(temp * scale->zoom);
+	return (isom_y);
 }
 
 int	trans_isom(t_structs *val)
@@ -59,12 +71,11 @@ int	trans_isom(t_structs *val)
 		hr = 0;
 		while (hr < val->map->width)
 		{
-            val->isom[vt][hr].x = isom_x(val->coord[vt][hr], val->scale);
-            val->isom[vt][hr].y = isom_y(val->coord[vt][hr], val->scale);
-            hr++;
+			val->isom[vt][hr].x = isom_x(val->coord[vt][hr], val->scale);
+			val->isom[vt][hr].y = isom_y(val->coord[vt][hr], val->scale);
+			hr++;
 		}
 		vt++;
 	}
 	return (0);
 }
-

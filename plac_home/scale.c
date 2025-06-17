@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   scale.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/17 10:37:32 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/17 11:06:02 by sohyamaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "prot.h"
 
 void	set_scale(t_structs *val)
@@ -75,7 +87,7 @@ int	offset_image(t_structs *val)
 {
 	int	vt;
 	int	hr;
-	int error;
+	int	error;
 
 	vt = 0;
 	if (val->scale->offset_x == 0 && val->scale->offset_y == 0)

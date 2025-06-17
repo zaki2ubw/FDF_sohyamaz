@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/17 10:36:17 by sohyamaz          #+#    #+#             */
+/*   Updated: 2025/06/17 11:42:13 by sohyamaz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "prot.h"
 
 void	error_exit(t_structs **val, int error)
@@ -21,7 +33,7 @@ void	free_val(t_structs **val)
 	free ((*val)->scale);
 	free ((*val)->var);
 	free ((*val)->image);
-	free ((*val)->palette);
+	//free ((*val)->palette);
 	free ((*val)->calc);
 	free (*val);
 	return ;

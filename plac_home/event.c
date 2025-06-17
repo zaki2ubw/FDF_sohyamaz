@@ -6,7 +6,7 @@
 /*   By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 10:47:40 by sohyamaz          #+#    #+#             */
-/*   Updated: 2025/06/15 21:28:12 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2025/06/17 11:00:08 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	key_event(int keycode, t_structs *val)
 			val->scale->zoom = 1;
 	}
 	else if (keycode == 97 || keycode == 100 \
-|| keycode == 115 || keycode == 119)
+	|| keycode == 115 || keycode == 119)
 		apply_offset(keycode, val);
 	else
 		return (0);

@@ -6,7 +6,7 @@
 #    By: sohyamaz <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/08 12:07:41 by sohyamaz          #+#    #+#              #
-#    Updated: 2025/06/08 15:33:48 by sohyamaz         ###   ########.fr        #
+#    Updated: 2025/06/17 11:41:48 by sohyamaz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@
 NAME	= fdf
 SRCS	= main.c\
 		  bresenham.c\
-		  color.c\
 		  draw.c\
 		  event.c\
 		  exit.c\
